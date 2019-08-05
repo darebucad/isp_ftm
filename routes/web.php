@@ -22,3 +22,7 @@ Route::get('/Products', 'ProductsController@Index');
 
 // API
 Route::get('/api/getCategories', 'APIController@getCategories')->name("api.getCategories");
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
