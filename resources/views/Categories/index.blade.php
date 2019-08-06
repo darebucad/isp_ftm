@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.master')
 
 @section('css')
   <link href="{{asset('css/dataTables.bootstrap.min.css')}}" rel="stylesheet">
@@ -61,7 +61,7 @@
             render: function ( data, type, row ) {
               return '<button type="button" class="btn btn-default">Edit</button>'
                      +'<button type="button" class="btn btn-danger">Delete</button>';
-            }     
+            }
           },
         ]
       });
