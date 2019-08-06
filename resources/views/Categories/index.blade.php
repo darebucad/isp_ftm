@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.master')
 
 @section('css')
   <link href="{{asset('css/dataTables.bootstrap.min.css')}}" rel="stylesheet">
@@ -11,7 +11,7 @@
           <h2>Product Categories</h2>
           <ul class="nav navbar-right panel_toolbox">
             <li>
-                <button type="button" class="btn btn-primary">New Product Category</button>
+                <input type="button" class="btn btn-primary" value="New Product Category" onclick="window.location.href='/Categories/Add'" />
             </li>
           </ul>
           <div class="clearfix"></div>
@@ -58,6 +58,7 @@
             "width": "20%",
             "data":null,
             "orderable": false,
+            "searchable":false,
             render: function ( data, type, row ) {
               return '<button type="button" class="btn btn-default">Edit</button>'
                      +'<button type="button" class="btn btn-danger">Delete</button>';
