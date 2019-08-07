@@ -14,6 +14,11 @@
 // Dashboard
 Route::get('/', 'HomeController@Index');
 
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
+
+
 //Categories
 Route::get('/Categories', 'CategoriesController@Index');
 
@@ -23,6 +28,7 @@ Route::get('/Products', 'ProductsController@Index');
 // API
 Route::get('/api/getCategories', 'APIController@getCategories')->name("api.getCategories");
 
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
+// Suppliers
+Route::get('/suppliers', 'SuppliersController@index')->name('suppliers');
+Route::get('/suppliers/create', 'SuppliersController@create');
+Route::post('suppliers/store', 'SuppliersController@store');
