@@ -60,12 +60,17 @@
             "orderable": false,
             "searchable":false,
             render: function ( data, type, row ) {
-              return '<button type="button" class="btn btn-default">Edit</button>'
+              return '<button type="button" class="btn btn-default" onclick="editCategory(\''+data.Id+'\')">Edit</button>'
                      +'<button type="button" class="btn btn-danger">Delete</button>';
             }
           },
         ]
       });
     });
+
+    function editCategory(id){
+      window.location.href = '/Categories/Edit/' + id;
+    }
+
   </script>
 @endsection()

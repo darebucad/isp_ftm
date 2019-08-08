@@ -69,7 +69,7 @@
                       if(data.errors != undefined && data.errors.length > 0){
                         showErrorMessage(data.errors);
                       }else{
-                        toastr.success('New Procuct Category created','success', {timeOut: 3000});
+                        toastr.success('Procuct Category updated','success', {timeOut: 3000});
                         window.setTimeout( function(){
                           window.location.href="/Categories";
                         }, 3000 );
