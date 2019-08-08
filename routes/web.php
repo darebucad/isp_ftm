@@ -21,6 +21,9 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 //Categories
 Route::get('/Categories', 'CategoriesController@Index');
+Route::get('/Categories/Add', 'CategoriesController@Create');
+//Categories Saving
+Route::post('/Categories/AddCategory', 'CategoriesController@Store');
 
 //Products
 Route::get('/Products', 'ProductsController@Index');
