@@ -25,8 +25,8 @@ Route::get('/Categories/Add', 'CategoriesController@Create');
 Route::get('/Categories/Edit/{id}','CategoriesController@Show');
 //Categories Saving
 Route::post('/Categories/AddCategory', 'CategoriesController@Store');
-//Route::post('/Categories/EditCategory', 'CategoriesController@Update');
 Route::match(['put', 'patch'], '/Categories/EditCategory/{id}','CategoriesController@Update');
+Route::get('/Categories/Delete/{id}','CategoriesController@Destroy');
 
 //Products
 Route::get('/Products', 'ProductsController@Index');

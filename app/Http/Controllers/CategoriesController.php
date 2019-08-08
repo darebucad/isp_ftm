@@ -83,4 +83,12 @@ class CategoriesController extends Controller
             return response()->json(['success'=>'Record is successfully added','errors'=>[]]);
         }
     }
+
+    public function Destroy($id)
+    {
+        $nerd = Categories::find($id);
+        $nerd->delete();
+        
+        return response()->json(['success'=>'Record is successfully added','errors'=>[]]);
+    }
 }
