@@ -17,12 +17,19 @@ class CategoriesController extends Controller
         return view('categories.create');
     }
 
+    public function Show($id)
+    {
+        $category = Categories::findOrFail($id);
+
+        return view('categories.edit', ['category' => $category]);
+    }
+
     public function Store(Request $request){
 
 
         $messages = [
             'name.required' => 'Please enter category name',     
-            'description.unique:categories' => 'Category already exist',
+            'name.unique' => 'Category already exist',
             'description.required' => 'Please enter description',
         ];
 
@@ -47,5 +54,33 @@ class CategoriesController extends Controller
         $category->save();
 
         return response()->json(['success'=>'Record is successfully added','errors'=>[]]);
+    }
+
+    public function Update(Request $request, $id)
+    {
+        $messages = [
+            'name.required' => 'Please enter category name',     
+            'description.required' => 'Please enter description',
+        ];
+
+        $validator = \Validator::make($request->all(), [
+            'name' => 'required',
+            'description' => 'required',
+        ],$messages);
+
+        if ($validator->fails()) {
+            return response()->json(['errors'=>$validator->errors()->all()]);
+        } else {
+            $userId = Auth::id();
+            $current_time = Carbon::now('Asia/Manila');
+            
+            $category = Categories::findOrFail($id);
+            $category->description = $request->input('description');
+            $category->created_at = $current_time->toDateTimeString();
+            $category->user_id = $userId;
+            
+            $category->save();
+            return response()->json(['success'=>'Record is successfully added','errors'=>[]]);
+        }
     }
 }
