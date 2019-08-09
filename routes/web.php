@@ -33,8 +33,10 @@ Route::get('/Products', 'ProductsController@Index');
 
 // API
 Route::get('/api/getCategories', 'APIController@getCategories')->name("api.getCategories");
+Route::get('/api/getSuppliers', 'APIController@getSuppliers')->name('api.getSuppliers');
+
 
 // Suppliers
 Route::get('/suppliers', 'SuppliersController@index')->name('suppliers');
 Route::get('/suppliers/create', 'SuppliersController@create');
-Route::post('suppliers/store', 'SuppliersController@store');
+Route::post('/suppliers/store', 'SuppliersController@store');

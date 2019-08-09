@@ -8,21 +8,21 @@
 <div class="col-md-12 col-sm-12 col-xs-12">
     <div class="x_panel">
         <div class="x_title">
-          <h2>Product Categories</h2>
+          <h2>Suppliers</h2>
           <ul class="nav navbar-right panel_toolbox">
             <li>
-                <input type="button" class="btn btn-primary" value="New Product Category" onclick="window.location.href='/suppliers/create'" />
+                <input type="button" class="btn btn-primary" value="New" onclick="window.location.href='/suppliers/create'" />
             </li>
           </ul>
           <div class="clearfix"></div>
         </div>
         <div class="x_content">
 
-          <table class="table" id="tblCategories">
+          <table class="table" id="suppliers">
             <thead>
               <tr>
                 <th>Name</th>
-                <th>Description</th>
+                <th>Address</th>
                 <th></th>
               </tr>
             </thead>
@@ -40,19 +40,19 @@
   <script src="{{asset('js/dataTables.bootstrap.min.js')}}"></script>
   <script>
     $(document).ready(function(){
-      $("#tblCategories").DataTable({
+      $("#suppliers").DataTable({
         "pageLength": 30,
         "processing": true,
         "serverSide": true,
-        "ajax": "{{route('api.getCategories')}}",
+        "ajax": "{{route('api.getSuppliers')}}",
         "columns":[
           {
             "width": "20%",
-            "data":"Name",
+            "data":"name",
           },
           {
             "width": "60%",
-            "data":"Description"
+            "data":"address"
           },
           {
             "width": "20%",

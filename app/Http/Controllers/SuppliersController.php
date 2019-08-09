@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facade\Auth;
 
 use App\Supplier;
 
@@ -40,9 +41,30 @@ class SuppliersController extends Controller
      */
     public function store(Request $request)
     {
-      $_token = $request->_token;
+        $_token = $request->_token;
         $array_data = $request->arrData;
         $current_time = Carbon::now('Asia/Manila');
+
+        $messages = [
+          'name.required' => 'Please enter supplier name',
+          'name.unique' => 'Supplier name already exist',
+          'address.required' => 'Please enter supplier address',
+        ];
+
+        $validator = \Validator::make($request->all(),
+            [
+                'name' => 'required|unique:suppliers',
+                'description'  => 'required',
+            ], $messages
+        );
+
+        if ($validor->fails()) {
+          return response()->json(['errors'=>$validator->errors()->all()]);
+        } else {
+          // code...
+        }
+
+
 
         foreach ($array_data as $value) {
           // $_token = $value['_token'];
