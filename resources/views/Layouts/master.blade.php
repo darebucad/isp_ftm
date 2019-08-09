@@ -77,6 +77,7 @@
                   <li><a><i class="fa fa-edit"></i> Products <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                       <li><a href="/Categories">Product Categories</a></li>
+                      <li><a href="/Warehouse">Warehouse</a></li>
                       <li><a href="/Products">Products</a></li>
                     </ul>
                   </li>

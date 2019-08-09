@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Categories;
 use App\Supplier;
+use App\Warehouse;
 
 class APIController extends Controller
 {
@@ -19,5 +20,12 @@ class APIController extends Controller
       $query = Supplier::select('id', 'name', 'address');
 
       return datatables($query)->make(true);
+    }
+
+    // Get list of Warehouse
+    public function getWarehouse(){
+        $query = Warehouse::select('Id', 'Name', 'Address');
+  
+        return datatables($query)->make(true);
     }
 }

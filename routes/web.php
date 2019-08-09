@@ -23,6 +23,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/Categories', 'CategoriesController@Index');
 Route::get('/Categories/Add', 'CategoriesController@Create');
 Route::get('/Categories/Edit/{id}','CategoriesController@Show');
+
 //Categories Saving
 Route::post('/Categories/AddCategory', 'CategoriesController@Store');
 Route::match(['put', 'patch'], '/Categories/EditCategory/{id}','CategoriesController@Update');
@@ -34,9 +35,20 @@ Route::get('/Products', 'ProductsController@Index');
 // API
 Route::get('/api/getCategories', 'APIController@getCategories')->name("api.getCategories");
 Route::get('/api/getSuppliers', 'APIController@getSuppliers')->name('api.getSuppliers');
+Route::get('/api/getWarehouse', 'APIController@getWarehouse')->name('api.getWarehouse');
 
 
 // Suppliers
 Route::get('/suppliers', 'SuppliersController@index')->name('suppliers');
 Route::get('/suppliers/create', 'SuppliersController@create');
 Route::post('/suppliers/store', 'SuppliersController@store');
+
+//Warehouse
+Route::get('/Warehouse', 'WarehouseController@index');
+Route::get('/Warehouse/Add', 'WarehouseController@Create');
+Route::get('/Warehouse/Edit/{id}','WarehouseController@Show');
+//Warehouse saving
+Route::post('/Warehouse/AddWarehouse', 'WarehouseController@Store');
+Route::match(['put', 'patch'], '/Warehouse/EditWarehouse/{id}','WarehouseController@Update');
+Route::get('/Warehouse/Delete/{id}','WarehouseController@Destroy');
+
