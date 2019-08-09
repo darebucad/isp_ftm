@@ -64,7 +64,7 @@ class CategoriesController extends Controller
         ];
 
         $validator = \Validator::make($request->all(), [
-            'name' => 'required',
+            'name' => 'required|unique:categories,name,'. $id,
             'description' => 'required',
         ],$messages);
 
@@ -75,6 +75,7 @@ class CategoriesController extends Controller
             $current_time = Carbon::now('Asia/Manila');
             
             $category = Categories::findOrFail($id);
+            $category->name = $request->input('name');
             $category->description = $request->input('description');
             $category->created_at = $current_time->toDateTimeString();
             $category->user_id = $userId;
