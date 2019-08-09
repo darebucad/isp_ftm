@@ -42,6 +42,9 @@ Route::get('/api/getWarehouse', 'APIController@getWarehouse')->name('api.getWare
 Route::get('/suppliers', 'SuppliersController@index')->name('suppliers');
 Route::get('/suppliers/create', 'SuppliersController@create');
 Route::post('/suppliers/store', 'SuppliersController@store');
+Route::get('/suppliers/edit/{id}', 'SuppliersController@edit');
+Route::post('/suppliers/update/{id}', 'SuppliersController@update');
+
 
 //Warehouse
 Route::get('/Warehouse', 'WarehouseController@index');
@@ -51,4 +54,3 @@ Route::get('/Warehouse/Edit/{id}','WarehouseController@Show');
 Route::post('/Warehouse/AddWarehouse', 'WarehouseController@Store');
 Route::match(['put', 'patch'], '/Warehouse/EditWarehouse/{id}','WarehouseController@Update');
 Route::get('/Warehouse/Delete/{id}','WarehouseController@Destroy');
-

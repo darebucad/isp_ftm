@@ -17,17 +17,17 @@
             @csrf
 
             <div class="form-group">
-              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="supplier_name">Name<span class="required">*</span>
+              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="supplier">Name<span class="required">*</span>
               </label>
               <div class="col-md-6 col-sm-6 col-xs-12">
-                <input type="text" name="supplier_name" id="supplier_name" required="required" class="form-control col-md-7 col-xs-12" autofocus>
+                <input type="text" name="supplier" id="supplier" required="required" class="form-control col-md-7 col-xs-12" autofocus>
               </div>
             </div>
             <div class="form-group">
-              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="supplier_address">Address<span class="required">*</span>
+              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="address">Address<span class="required">*</span>
               </label>
               <div class="col-md-6 col-sm-6 col-xs-12">
-                <textarea class="form-control" rows="3" placeholder="Address" id="supplier_address"></textarea>
+                <textarea class="form-control" rows="3" placeholder="Address" id="address"></textarea>
               </div>
             </div>
             <div class="ln_solid"></div>
@@ -52,30 +52,47 @@
 
       $('#btnSubmit').on('click', function(){
           var _token = CSRF_TOKEN;
-          var supplier_name = $('#supplier_name').val();
-          var supplier_address = $('#supplier_address').val();
-          var arrData = [];
-          var obj = {};
+          var name = $('#supplier').val();
+          var address = $('#address').val();
+          var data= {};
 
-        // VALIDATION
-
-        // obj._token = _token;
-        obj.name = supplier_name;
-        obj.address = supplier_address;
-
-        arrData.push(obj);
+          data.id = 0;
+          data.name = name;
+          data.address = address;
 
         $.ajax({
+          headers: {
+            'X-CSRF-TOKEN': _token
+          },
           type: "POST",
           url: "/suppliers/store",
-          data: {_token: _token, arrData: arrData},
+          data: data,
           dataType: "JSON",
           success: function(data){
-            console.log('saved');
-            console.log(data);
+            if (data.errors != undefined && data.errors.length > 0) {
+              showErrorMessage(data.errors);
+
+            } else {
+              toastr.success('New supplier was created', 'Success', {timeout: 1000});
+              window.setTimeout(function(){
+                window.location.href = '/suppliers';
+              }, 1000);
+            }
+          },
+          error: function(error){
+            console.log(error);
           }
         });
       });
+
+      function showErrorMessage(errMessage){
+        var errMessageContent = '';
+        errMessage.forEach(element => {
+          errMessageContent = errMessageContent + element + '<br/>';
+        });
+        toastr.error(errMessageContent, 'Error', {timeOut: 3000});
+      }
+
     });
   </script>
 @endsection()

@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facade\Auth;
+use Illuminate\Support\Facades\Auth;
+use Validator;
 
 use App\Supplier;
 
@@ -41,9 +42,9 @@ class SuppliersController extends Controller
      */
     public function store(Request $request)
     {
-        $_token = $request->_token;
-        $array_data = $request->arrData;
-        $current_time = Carbon::now('Asia/Manila');
+      $user_id = Auth::id();
+      $supplier = new Supplier();
+      $current_time = Carbon::now('Asia/Manila');
 
         $messages = [
           'name.required' => 'Please enter supplier name',
@@ -51,39 +52,29 @@ class SuppliersController extends Controller
           'address.required' => 'Please enter supplier address',
         ];
 
-        $validator = \Validator::make($request->all(),
+        $validator = Validator::make($request->all(),
             [
                 'name' => 'required|unique:suppliers',
-                'description'  => 'required',
+                'address'  => 'required',
             ], $messages
         );
 
-        if ($validor->fails()) {
+        if ($validator->fails()) {
           return response()->json(['errors'=>$validator->errors()->all()]);
         } else {
-          // code...
-        }
 
 
-
-        foreach ($array_data as $value) {
-          // $_token = $value['_token'];
-          $supplier_name = $value['supplier_name'];
-          $supplier_address = $value['supplier_address'];
+          $supplier->name = $request->input('name');
+          $supplier->address = $request->input('address');
+          $supplier->created_at = $current_time->toDateTimeString();
+          $supplier->user_id = $user_id;
+          $supplier->save();
 
         }
-
-        $data = array(
-          'name' => $supplier_name,
-          'address' => $supplier_address,
-          'created_at' => $current_time->toDateTimeString(),
-        );
-
-        Supplier::insert($data);
-
 
         $response = array(
-          'data' => $array_data,
+          'success' => 'New supplier was successfully added',
+          'errors' => []
         );
 
         return response()->json($response);
@@ -97,7 +88,7 @@ class SuppliersController extends Controller
      */
     public function show($id)
     {
-        //
+
     }
 
     /**
@@ -108,7 +99,9 @@ class SuppliersController extends Controller
      */
     public function edit($id)
     {
-        //
+        $supplier = Supplier::findOrFail($id);
+
+        return view('suppliers.edit')->with('supplier', $supplier);
     }
 
     /**
@@ -120,7 +113,40 @@ class SuppliersController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+      $user_id = Auth::id();
+      $current_time = Carbon::now('Asia/Manila');
+
+        $messages = [
+          'name.required' => 'Please enter supplier name',
+          'address.required' => 'Please enter supplier address',
+        ];
+
+        $validator = Validator::make($request->all(),
+            [
+                'name' => 'required|unique:suppliers,name,'. $id,
+                'address'  => 'required',
+            ], $messages
+        );
+
+        if ($validator->fails()) {
+          return response()->json(['errors'=>$validator->errors()->all()]);
+        } else {
+
+          $supplier = Supplier::findOrFail($id);
+          $supplier->name = $request->input('name');
+          $supplier->address = $request->input('address');
+          $supplier->created_at = $current_time->toDateTimeString();
+          $supplier->user_id = $user_id;
+          $supplier->save();
+
+        }
+
+        $response = array(
+          'success' => 'Supplier was successfully edited',
+          'errors' => []
+        );
+
+        return response()->json($response);
     }
 
     /**
