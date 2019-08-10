@@ -44,6 +44,7 @@ Route::get('/suppliers/create', 'SuppliersController@create');
 Route::post('/suppliers/store', 'SuppliersController@store');
 Route::get('/suppliers/edit/{id}', 'SuppliersController@edit');
 Route::post('/suppliers/update/{id}', 'SuppliersController@update');
+Route::get('/suppliers/delete/{id}', 'SuppliersController@destroy');
 
 
 //Warehouse

@@ -9,6 +9,7 @@
 <div class="col-md-12 col-sm-12 col-xs-12">
   <input type="hidden" id="delete_id">
     <div class="x_panel">
+
         <div class="x_title">
           <h2>Suppliers</h2>
           <ul class="nav navbar-right panel_toolbox">
@@ -34,6 +35,27 @@
 
         </div>
       </div>
+
+      <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;" id="modalDialog">
+          <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel2">Delete</h4>
+              </div>
+              <div class="modal-body">
+                <p>Are you sure you want to delete this supplier?</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="btnCancel">Cancel</button>
+                <button type="button" class="btn btn-primary" id="btnDelete">Yes</button>
+              </div>
+
+            </div>
+          </div>
+        </div>
   </div>
 @endsection()
 
@@ -43,8 +65,11 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
   <script>
-  var table;
+
     $(document).ready(function(){
+      var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+      var table;
+
       table = $("#suppliers").DataTable({
         "pageLength": 30,
         "processing": true,
@@ -65,20 +90,54 @@
             "orderable": false,
             "searchable":false,
             render: function ( data, type, row ) {
-              return '<button type="button" class="btn btn-default" onclick="window.location.href=\'/suppliers/edit/'+data.id+'\'">Edit</button>'
-                     +'<button type="button" class="btn btn-danger" data-toggle="modal" data-target=".bs-example-modal-sm" onclick="showDeleteConfirmation(\''+data.Id+'\')">Delete</button>';
+              return '<button type="button" class="btn btn-default" onclick="editSupplier(\''+ data.id +'\')">Edit</button>'
+                     +'<button type="button" class="btn btn-danger" data-toggle="modal" data-target=".bs-example-modal-sm" onclick="showDeleteConfirmation(\''+ data.id +'\')">Delete</button>';
             }
           },
         ]
       });
 
-      function editSupplier(id){
-        window.location.href = '/suppliers/edit/' + id;
-      }
 
-      function showDeleteConfirmation(id){
-        $("#delete_id").val(id);
-      }
+      $("#btnDelete").on('click', function(){
+        var id = $("#delete_id").val();
+
+        console.log(id);
+
+        $.ajax({
+          type:"GET",
+          url:"/suppliers/delete/" + id,
+          success:function(data){
+              if(data.errors != undefined && data.errors.length > 0){
+                showErrorMessage(data.errors);
+              }else{
+                toastr.success('Supplier was deleted','Success', {timeOut: 1000});
+                $("#btnCancel").click();
+                table.ajax.reload();
+              }
+          },
+          error:function(error){
+              console.log(error);
+          }
+              });
+      });
+
+
     });
+
+    function editSupplier(id){
+      window.location.href = '/suppliers/edit/' + id;
+    }
+
+    function showDeleteConfirmation(id){
+      $("#delete_id").val(id);
+    }
+
+    function showErrorMessage(errMessage){
+            var errMessageContent = '';
+            errMessage.forEach(element => {
+              errMessageContent = errMessageContent + element + '<br/>';
+            });
+            toastr.error(errMessageContent, 'Error', {timeOut: 3000});
+    }
   </script>
 @endsection()
