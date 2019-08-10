@@ -78,6 +78,7 @@
                     <ul class="nav child_menu">
                       <li><a href="/Categories">Product Categories</a></li>
                       <li><a href="/Warehouse">Warehouse</a></li>
+                      <li><a href="/Section">Section</a></li>
                       <li><a href="/Products">Products</a></li>
                     </ul>
                   </li>

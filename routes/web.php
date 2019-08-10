@@ -36,6 +36,7 @@ Route::get('/Products', 'ProductsController@Index');
 Route::get('/api/getCategories', 'APIController@getCategories')->name("api.getCategories");
 Route::get('/api/getSuppliers', 'APIController@getSuppliers')->name('api.getSuppliers');
 Route::get('/api/getWarehouse', 'APIController@getWarehouse')->name('api.getWarehouse');
+Route::get('/api/getSections', 'APIController@getSections')->name('api.getSections');
 
 
 // Suppliers
@@ -54,3 +55,12 @@ Route::get('/Warehouse/Edit/{id}','WarehouseController@Show');
 Route::post('/Warehouse/AddWarehouse', 'WarehouseController@Store');
 Route::match(['put', 'patch'], '/Warehouse/EditWarehouse/{id}','WarehouseController@Update');
 Route::get('/Warehouse/Delete/{id}','WarehouseController@Destroy');
+
+//Sections
+Route::get('/Section', 'SectionController@index');
+Route::get('/Section/Add', 'SectionController@Create');
+Route::get('/Section/Edit/{id}','SectionController@Show');
+//Sections saving
+Route::post('/Section/AddSection', 'SectionController@Store');
+Route::match(['put', 'patch'], '/Section/EditSection/{id}','SectionController@Update');
+Route::get('/Section/Delete/{id}','SectionController@Destroy');

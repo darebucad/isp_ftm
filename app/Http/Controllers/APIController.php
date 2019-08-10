@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Categories;
 use App\Supplier;
 use App\Warehouse;
+use App\Sections;
 
 class APIController extends Controller
 {
@@ -25,6 +26,13 @@ class APIController extends Controller
     // Get list of Warehouse
     public function getWarehouse(){
         $query = Warehouse::select('Id', 'Name', 'Address');
+  
+        return datatables($query)->make(true);
+    }
+
+    // Get list of Sections
+    public function getSections(){
+        $query = Sections::select('Id', 'Name', 'Description');
   
         return datatables($query)->make(true);
     }
