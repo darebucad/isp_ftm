@@ -120,7 +120,7 @@ class WarehouseController extends Controller
             $warehouse = Warehouse::findOrFail($id);
             $warehouse->name = $request->input('name');
             $warehouse->address = $request->input('address');
-            $warehouse->created_at = $current_time->toDateTimeString();
+            $warehouse->updated_at = $current_time->toDateTimeString();
             $warehouse->user_id = $userId;
             
             $warehouse->save();

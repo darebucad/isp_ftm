@@ -77,7 +77,7 @@ class CategoriesController extends Controller
             $category = Categories::findOrFail($id);
             $category->name = $request->input('name');
             $category->description = $request->input('description');
-            $category->created_at = $current_time->toDateTimeString();
+            $category->updated_at = $current_time->toDateTimeString();
             $category->user_id = $userId;
             
             $category->save();
