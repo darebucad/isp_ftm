@@ -19,9 +19,8 @@
           <form id="products" data-parsley-validate="" class="form-horizontal form-label-left" novalidate="">
             @csrf
 
-
             <div class="form-group">
-              <label class="col-md-3 col-sm-3 col-xs-12 " for="product">Name<span class="required">*</span></label>
+              <label class="col-md-3 col-sm-3 col-xs-12" for="product">Name<span class="required">*</span></label>
             </div>
 
             <div class="form-group">
@@ -30,19 +29,14 @@
               </div>
             </div>
 
-
-
             <div class="form-group">
               <label class="col-md-5 col-sm-3 col-xs-12" for="brand">Brand</label>
-
               <label class="col-md-5 col-sm-3 col-xs-12" for="category">Category</label>
-
             </div>
 
             <div class="form-group">
               <div class="col-md-5 col-sm-3 col-xs-12">
                 <input type="text" name="brand" id="brand" required="required" class="form-control col-md-7 col-xs-12">
-
               </div>
 
               <div class="col-md-5 col-sm-12 col-xs-12">
@@ -51,6 +45,7 @@
                 </select>
               </div>
             </div>
+
             <div class="form-group">
               <label class="col-md-3 col-sm-3 col-xs-12" for="description">Description<span class="required">*</span></label>
             </div>
@@ -61,15 +56,9 @@
               </div>
             </div>
 
-
-
-
-
             <div class="form-group">
               <label class="col-md-3 col-sm-3 col-xs-12" for="content">Content</label>
-
               <label class="col-md-3 col-sm-3 col-xs-12" for="net_weight">Net Weight</label>
-
               <label class="col-md-3 col-sm-3 col-xs-12" for="stock_on_hand">Stock on Hand</label>
             </div>
 
@@ -77,6 +66,7 @@
               <div class="col-md-3 col-sm-3 col-xs-12">
                 <input type="text" name="content" id="content" required="required" class="form-control col-md-7 col-xs-12">
               </div>
+
               <div class="col-md-3 col-sm-3 col-xs-12">
                 <input type="text" name="net_weight" id="net_weight" required="required" class="form-control col-md-7 col-xs-12">
               </div>
@@ -84,16 +74,7 @@
               <div class="col-md-4 col-sm-4 col-xs-12">
                 <input type="text" name="stock_on_hand" id="stock_on_hand" required="required" class="form-control col-md-7 col-xs-12">
               </div>
-
             </div>
-
-
-
-            <div class="form-group">
-
-
-            </div>
-
 
             <div class="form-group">
               <label class="col-md-2 col-sm-2 col-xs-12" for="Purchase Price">Purchase Price</label>
@@ -107,28 +88,15 @@
                 <input type="text" class="form-control" name="unit_price" id="unit_price" required="required">
                 <span class="fa fa-dollar form-control-feedback right" aria-hidden="true"></span>
               </div>
-
-              <!-- <div class="col-md-2 col-sm-2 col-xs-12">
-                <input type="text" name="purchase_price" id="purchase_price" required="required" class="form-control col-md-7 col-xs-12">
-              </div> -->
-            </div>
-
-            <div class="form-group">
-
             </div>
 
             <div class="form-group">
               <label class="col-md-4 col-sm-3 col-xs-12" for="supplier">Supplier</label>
-
               <label class="col-md-4 col-sm-3 col-xs-12" for="warehouse">Warehouse</label>
-
               <label class="col-md-4 col-sm-3 col-xs-12" for="section">Section</label>
-
-
             </div>
 
             <div class="form-group">
-
               <div class="col-md-4 col-sm-8 col-xs-12">
                 <select name="supplier" id="supplier" class="col-md-12 col-xs-12">
                   <option value=""></option>
@@ -148,16 +116,11 @@
               </div>
             </div>
 
-            <div class="form-group">
-
-
-            </div>
-
 
             <div class="ln_solid"></div>
 
             <div class="form-group">
-              <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+              <div class="col-md-12 col-sm-6 col-xs-12 col-md-offset-5">
                 <input type="button" class="btn btn-primary" value="Cancel" onclick="window.location.href='/products'" />
                 <button type="button" class="btn btn-success" id="btnSubmit">Submit</button>
               </div>
