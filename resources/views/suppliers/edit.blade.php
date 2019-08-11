@@ -66,7 +66,7 @@
           headers: {
             'X-CSRF-TOKEN': _token
           },
-          type: "POST",
+          type: "PUT",
           url: "/suppliers/update/" + id,
           data: data,
           dataType: "JSON",

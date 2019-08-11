@@ -1,195 +1,170 @@
-@extends('layouts.app')
+@extends('layouts.master')
+
+@section('css')
+  <link href="{{asset('css/dataTables.bootstrap.min.css')}}" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
+@endsection()
 
 @section('content')
-<h1>Products</h1>
 <div class="col-md-12 col-sm-12 col-xs-12">
+  <input type="hidden" id="delete_id">
     <div class="x_panel">
-      <div class="x_title">
-        <h2>Table design <small>Custom design</small></h2>
-        <ul class="nav navbar-right panel_toolbox">
-          <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-          </li>
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-            <ul class="dropdown-menu" role="menu">
-              <li><a href="#">Settings 1</a>
-              </li>
-              <li><a href="#">Settings 2</a>
-              </li>
-            </ul>
-          </li>
-          <li><a class="close-link"><i class="fa fa-close"></i></a>
-          </li>
-        </ul>
-        <div class="clearfix"></div>
-      </div>
 
-      <div class="x_content">
-
-        <p>Add class <code>bulk_action</code> to table for bulk actions options on row select</p>
-
-        <div class="table-responsive">
-          <table class="table table-striped jambo_table bulk_action">
+        <div class="x_title">
+          <h2>Products</h2>
+          <ul class="nav navbar-right panel_toolbox">
+            <li>
+                <input type="button" class="btn btn-primary" value="New" onclick="window.location.href='/products/create'" />
+            </li>
+          </ul>
+          <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+          <table class="table" id="products">
             <thead>
-              <tr class="headings">
-                <th>
-                  <input type="checkbox" id="check-all" class="flat">
-                </th>
-                <th class="column-title">Invoice </th>
-                <th class="column-title">Invoice Date </th>
-                <th class="column-title">Order </th>
-                <th class="column-title">Bill to Name </th>
-                <th class="column-title">Status </th>
-                <th class="column-title">Amount </th>
-                <th class="column-title no-link last"><span class="nobr">Action</span>
-                </th>
-                <th class="bulk-actions" colspan="7">
-                  <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
-                </th>
+              <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Brand</th>
+                <th>Content</th>
+                <th>Net Weight</th>
+                <th>Stock on Hand</th>
+                <th>Purchase Price</th>
+                <th>Unit Price</th>
+                <th>Category</th>
+                <th>Supplier</th>
+                <th>Warehouse</th>
+                <th>Section</th>
+                <th>Created By</th>
+                <th>Date Created</th>
+                <th>Date Updated</th>
+                <th></th>
               </tr>
             </thead>
-
             <tbody>
-              <tr class="even pointer">
-                <td class="a-center ">
-                  <input type="checkbox" class="flat" name="table_records">
-                </td>
-                <td class=" ">121000040</td>
-                <td class=" ">May 23, 2014 11:47:56 PM </td>
-                <td class=" ">121000210 <i class="success fa fa-long-arrow-up"></i></td>
-                <td class=" ">John Blank L</td>
-                <td class=" ">Paid</td>
-                <td class="a-right a-right ">$7.45</td>
-                <td class=" last"><a href="#">View</a>
-                </td>
-              </tr>
-              <tr class="odd pointer">
-                <td class="a-center ">
-                  <input type="checkbox" class="flat" name="table_records">
-                </td>
-                <td class=" ">121000039</td>
-                <td class=" ">May 23, 2014 11:30:12 PM</td>
-                <td class=" ">121000208 <i class="success fa fa-long-arrow-up"></i>
-                </td>
-                <td class=" ">John Blank L</td>
-                <td class=" ">Paid</td>
-                <td class="a-right a-right ">$741.20</td>
-                <td class=" last"><a href="#">View</a>
-                </td>
-              </tr>
-              <tr class="even pointer">
-                <td class="a-center ">
-                  <input type="checkbox" class="flat" name="table_records">
-                </td>
-                <td class=" ">121000038</td>
-                <td class=" ">May 24, 2014 10:55:33 PM</td>
-                <td class=" ">121000203 <i class="success fa fa-long-arrow-up"></i>
-                </td>
-                <td class=" ">Mike Smith</td>
-                <td class=" ">Paid</td>
-                <td class="a-right a-right ">$432.26</td>
-                <td class=" last"><a href="#">View</a>
-                </td>
-              </tr>
-              <tr class="odd pointer">
-                <td class="a-center ">
-                  <input type="checkbox" class="flat" name="table_records">
-                </td>
-                <td class=" ">121000037</td>
-                <td class=" ">May 24, 2014 10:52:44 PM</td>
-                <td class=" ">121000204</td>
-                <td class=" ">Mike Smith</td>
-                <td class=" ">Paid</td>
-                <td class="a-right a-right ">$333.21</td>
-                <td class=" last"><a href="#">View</a>
-                </td>
-              </tr>
-              <tr class="even pointer">
-                <td class="a-center ">
-                  <input type="checkbox" class="flat" name="table_records">
-                </td>
-                <td class=" ">121000040</td>
-                <td class=" ">May 24, 2014 11:47:56 PM </td>
-                <td class=" ">121000210</td>
-                <td class=" ">John Blank L</td>
-                <td class=" ">Paid</td>
-                <td class="a-right a-right ">$7.45</td>
-                <td class=" last"><a href="#">View</a>
-                </td>
-              </tr>
-              <tr class="odd pointer">
-                <td class="a-center ">
-                  <input type="checkbox" class="flat" name="table_records">
-                </td>
-                <td class=" ">121000039</td>
-                <td class=" ">May 26, 2014 11:30:12 PM</td>
-                <td class=" ">121000208 <i class="error fa fa-long-arrow-down"></i>
-                </td>
-                <td class=" ">John Blank L</td>
-                <td class=" ">Paid</td>
-                <td class="a-right a-right ">$741.20</td>
-                <td class=" last"><a href="#">View</a>
-                </td>
-              </tr>
-              <tr class="even pointer">
-                <td class="a-center ">
-                  <input type="checkbox" class="flat" name="table_records">
-                </td>
-                <td class=" ">121000038</td>
-                <td class=" ">May 26, 2014 10:55:33 PM</td>
-                <td class=" ">121000203</td>
-                <td class=" ">Mike Smith</td>
-                <td class=" ">Paid</td>
-                <td class="a-right a-right ">$432.26</td>
-                <td class=" last"><a href="#">View</a>
-                </td>
-              </tr>
-              <tr class="odd pointer">
-                <td class="a-center ">
-                  <input type="checkbox" class="flat" name="table_records">
-                </td>
-                <td class=" ">121000037</td>
-                <td class=" ">May 26, 2014 10:52:44 PM</td>
-                <td class=" ">121000204</td>
-                <td class=" ">Mike Smith</td>
-                <td class=" ">Paid</td>
-                <td class="a-right a-right ">$333.21</td>
-                <td class=" last"><a href="#">View</a>
-                </td>
-              </tr>
-
-              <tr class="even pointer">
-                <td class="a-center ">
-                  <input type="checkbox" class="flat" name="table_records">
-                </td>
-                <td class=" ">121000040</td>
-                <td class=" ">May 27, 2014 11:47:56 PM </td>
-                <td class=" ">121000210</td>
-                <td class=" ">John Blank L</td>
-                <td class=" ">Paid</td>
-                <td class="a-right a-right ">$7.45</td>
-                <td class=" last"><a href="#">View</a>
-                </td>
-              </tr>
-              <tr class="odd pointer">
-                <td class="a-center ">
-                  <input type="checkbox" class="flat" name="table_records">
-                </td>
-                <td class=" ">121000039</td>
-                <td class=" ">May 28, 2014 11:30:12 PM</td>
-                <td class=" ">121000208</td>
-                <td class=" ">John Blank L</td>
-                <td class=" ">Paid</td>
-                <td class="a-right a-right ">$741.20</td>
-                <td class=" last"><a href="#">View</a>
-                </td>
-              </tr>
             </tbody>
           </table>
+
         </div>
-                
-            
       </div>
-    </div>
+
+      <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;" id="modalDialog">
+          <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel2">Delete</h4>
+              </div>
+              <div class="modal-body">
+                <p>Are you sure you want to delete this product?</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="btnCancel">Cancel</button>
+                <button type="button" class="btn btn-primary" id="btnDelete">Yes</button>
+              </div>
+
+            </div>
+          </div>
+        </div>
   </div>
+@endsection
+
+
+
+@section('js')
+  <script src="{{asset('js/dataTables.min.js')}}"></script>
+  <script src="{{asset('js/dataTables.bootstrap.min.js')}}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+  <script>
+
+    $(document).ready(function(){
+      var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+      var table;
+
+      table = $("#products").DataTable({
+        "pageLength": 30,
+        "processing": true,
+        "serverSide": true,
+        "ajax": "{{route('api.getProducts')}}",
+        "columns":[
+          {
+            // "width": "20%",
+            "data":"name",
+          },
+          {
+            // "width": "60%",
+            "data": "description"
+          },
+          { "data": "brand" },
+          { "data": "content" },
+          { "data": "net_weight" },
+          { "data": "stock_on_hand" },
+          { "data": "purchase_price" },
+          { "data": "unit_price" },
+          { "data": "category" },
+          { "data": "supplier" },
+          { "data": "warehouse" },
+          { "data": "section" },
+          { "data": "user" },
+          { "data": "created_at" },
+          { "data": "updated_at" },
+          {
+            // "width": "20%",
+            "data":null,
+            "orderable": false,
+            "searchable":false,
+            render: function ( data, type, row ) {
+              return '<button type="button" class="btn btn-default" onclick="editProduct(\''+ data.id +'\')">Edit</button>'
+                     +'<button type="button" class="btn btn-danger" data-toggle="modal" data-target=".bs-example-modal-sm" onclick="showDeleteConfirmation(\''+ data.id +'\')">Delete</button>';
+            }
+          },
+        ]
+      });
+
+
+      $("#btnDelete").on('click', function(){
+        var id = $("#delete_id").val();
+
+        console.log(id);
+
+        $.ajax({
+          type:"GET",
+          url:"/suppliers/delete/" + id,
+          success:function(data){
+              if(data.errors != undefined && data.errors.length > 0){
+                showErrorMessage(data.errors);
+              }else{
+                toastr.success('Supplier was deleted','Success', {timeOut: 1000});
+                $("#btnCancel").click();
+                table.ajax.reload();
+              }
+          },
+          error:function(error){
+              console.log(error);
+          }
+              });
+      });
+
+
+    });
+
+    function editSupplier(id){
+      window.location.href = '/suppliers/edit/' + id;
+    }
+
+    function showDeleteConfirmation(id){
+      $("#delete_id").val(id);
+    }
+
+    function showErrorMessage(errMessage){
+            var errMessageContent = '';
+            errMessage.forEach(element => {
+              errMessageContent = errMessageContent + element + '<br/>';
+            });
+            toastr.error(errMessageContent, 'Error', {timeOut: 3000});
+    }
+  </script>
 @endsection()

@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
 use App\Categories;
 use App\Supplier;
 use App\Warehouse;
 use App\Sections;
+use App\Product;
 
 class APIController extends Controller
 {
@@ -26,14 +29,95 @@ class APIController extends Controller
     // Get list of Warehouse
     public function getWarehouse(){
         $query = Warehouse::select('Id', 'Name', 'Address');
-  
+
         return datatables($query)->make(true);
     }
 
     // Get list of Sections
     public function getSections(){
         $query = Sections::select('Id', 'Name', 'Description');
-  
+
         return datatables($query)->make(true);
+    }
+
+    // Get list of Products
+    public function getProducts(){
+
+      $query = DB::table('products AS p')
+        ->leftjoin('categories AS c', 'c.id', '=', 'p.category_id')
+        ->leftjoin('suppliers AS s', 's.id', '=', 'p.supplier_id')
+        ->leftjoin('warehouse AS w', 'w.id', '=', 'p.warehouse_id')
+        ->leftjoin('sections AS se', 'se.id', '=', 'p.supplier_id')
+        ->leftjoin('users AS u', 'u.id', '=', 'p.user_id')
+        ->select('p.id', 'p.name', 'p.description', 'p.brand', 'p.content', 'p.net_weight', 'p.stock_on_hand', 'p.purchase_price', 'p.unit_price',
+       'c.name AS category', 's.name AS supplier', 'w.name AS warehouse', 'se.name AS section', 'u.name AS user', 'p.created_at', 'p.updated_at');
+
+       return datatables($query)->make(true);
+    }
+
+
+    // Search list of categories
+    public function searchCategories(Request $request){
+      $term = $request->q;
+
+      $categories = Categories::where('name', 'LIKE', '%' . $term . '%')
+      ->select('id', 'name AS text')
+      ->orderBy('name', 'ASC')
+      ->get();
+
+      $response = array(
+        'items'  =>  $categories
+      );
+
+      return response()->json($response);
+    }
+
+    // Search list of suppliers
+    public function searchSuppliers(Request $request){
+      $term = $request->q;
+
+      $suppliers = Supplier::where('name', 'LIKE', '%' . $term . '%')
+      ->select('id', 'name AS text')
+      ->orderBy('name', 'ASC')
+      ->get();
+
+      $response = array(
+        'items'  =>  $suppliers
+      );
+
+      return response()->json($response);
+    }
+
+
+    // Search list of warehouse
+    public function searchWarehouse(Request $request){
+      $term = $request->q;
+
+      $warehouse = Warehouse::where('name', 'LIKE', '%' . $term . '%')
+      ->select('id', 'name AS text')
+      ->orderBy('name', 'ASC')
+      ->get();
+
+      $response = array(
+        'items'  =>  $warehouse
+      );
+
+      return response()->json($response);
+    }
+
+    // Search list of sections
+    public function searchSections(Request $request){
+      $term = $request->q;
+
+      $sections = Sections::where('name', 'LIKE', '%' . $term . '%')
+      ->select('id', 'name AS text')
+      ->orderBy('name', 'ASC')
+      ->get();
+
+      $response = array(
+        'items'  =>  $sections
+      );
+
+      return response()->json($response);
     }
 }

@@ -30,21 +30,26 @@ Route::match(['put', 'patch'], '/Categories/EditCategory/{id}','CategoriesContro
 Route::get('/Categories/Delete/{id}','CategoriesController@Destroy');
 
 //Products
-Route::get('/Products', 'ProductsController@Index');
+Route::resource('products', 'ProductController');
 
 // API
 Route::get('/api/getCategories', 'APIController@getCategories')->name("api.getCategories");
 Route::get('/api/getSuppliers', 'APIController@getSuppliers')->name('api.getSuppliers');
 Route::get('/api/getWarehouse', 'APIController@getWarehouse')->name('api.getWarehouse');
 Route::get('/api/getSections', 'APIController@getSections')->name('api.getSections');
+Route::get('/api/getProducts', 'APIController@getProducts')->name('api.getProducts');
+Route::get('/api/searchCategories', 'APIController@searchCategories')->name('api.searchCategories');
+Route::get('/api/searchSuppliers', 'APIController@searchSuppliers')->name('api.searchSuppliers');
+Route::get('/api/searchWarehouse', 'APIController@searchWarehouse')->name('api.searchWarehouse');
+Route::get('/api/searchSections', 'APIController@searchSections')->name('api.searchSections');
 
 
 // Suppliers
-Route::get('/suppliers', 'SuppliersController@index')->name('suppliers');
+Route::get('/suppliers', 'SuppliersController@index');
 Route::get('/suppliers/create', 'SuppliersController@create');
 Route::post('/suppliers/store', 'SuppliersController@store');
 Route::get('/suppliers/edit/{id}', 'SuppliersController@edit');
-Route::post('/suppliers/update/{id}', 'SuppliersController@update');
+Route::match(['put', 'patch'], '/suppliers/update/{id}', 'SuppliersController@update');
 Route::get('/suppliers/delete/{id}', 'SuppliersController@destroy');
 
 

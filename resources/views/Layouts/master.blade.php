@@ -79,8 +79,8 @@
                       <li><a href="/Categories">Product Categories</a></li>
                       <li><a href="/Warehouse">Warehouse</a></li>
                       <li><a href="/Section">Section</a></li>
-                      <li><a href="/Products">Products</a></li>
-                      <li><a href="{{ route('suppliers') }}">Suppliers</a></li>
+                      <li><a href="{{ url('/products') }}">Products</a></li>
+                      <li><a href="{{ url('/suppliers') }}">Suppliers</a></li>
                     </ul>
                   </li>
                 </ul>
