@@ -66,10 +66,10 @@
           headers: {
             'X-CSRF-TOKEN': _token
           },
-          type: "PUT",
-          url: "/suppliers/update/" + id,
+          type: 'PUT',
+          url: '/suppliers/update/' + id,
           data: data,
-          dataType: "JSON",
+          dataType: 'JSON',
           success: function(data){
             if (data.errors != undefined && data.errors.length > 0) {
               showErrorMessage(data.errors);

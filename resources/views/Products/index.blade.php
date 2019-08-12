@@ -3,7 +3,7 @@
 @section('css')
   <link href="{{asset('css/dataTables.bootstrap.min.css')}}" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
-@endsection()
+@endsection
 
 @section('content')
 <div class="col-md-12 col-sm-12 col-xs-12">
@@ -24,20 +24,16 @@
             <thead>
               <tr>
                 <th>Name</th>
-                <th>Description</th>
+                <th>Category</th>
                 <th>Brand</th>
                 <th>Content</th>
                 <th>Net Weight</th>
                 <th>Stock on Hand</th>
                 <th>Purchase Price</th>
                 <th>Unit Price</th>
-                <th>Category</th>
                 <th>Supplier</th>
                 <th>Warehouse</th>
                 <th>Section</th>
-                <th>Created By</th>
-                <th>Date Created</th>
-                <th>Date Updated</th>
                 <th></th>
               </tr>
             </thead>
@@ -81,7 +77,7 @@
   <script>
 
     $(document).ready(function(){
-      var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+      var _token = $('meta[name="csrf-token"]').attr('content');
       var table;
 
       table = $("#products").DataTable({
@@ -91,28 +87,51 @@
         "ajax": "{{route('api.getProducts')}}",
         "columns":[
           {
-            // "width": "20%",
+            "width": "15%",
             "data":"name",
           },
           {
-            // "width": "60%",
-            "data": "description"
+            "width": "5%",
+            "data": "category"
           },
-          { "data": "brand" },
-          { "data": "content" },
-          { "data": "net_weight" },
-          { "data": "stock_on_hand" },
-          { "data": "purchase_price" },
-          { "data": "unit_price" },
-          { "data": "category" },
-          { "data": "supplier" },
-          { "data": "warehouse" },
-          { "data": "section" },
-          { "data": "user" },
-          { "data": "created_at" },
-          { "data": "updated_at" },
           {
-            // "width": "20%",
+            "width": "5%",
+            "data": "brand"
+          },
+          {
+            "width": "5%",
+            "data": "content"
+          },
+          {
+            "width": "5%",
+            "data": "net_weight"
+          },
+          {
+            "width": "5%",
+            "data": "stock_on_hand"
+          },
+          {
+            "width": "5%",
+            "data": "purchase_price"
+          },
+          {
+            "width": "5%",
+            "data": "unit_price"
+          },
+          {
+            "width": "10%",
+            "data": "supplier"
+          },
+          {
+            "width": "5%",
+            "data": "warehouse"
+          },
+          {
+            "width": "5%",
+            "data": "section"
+          },
+          {
+            "width": "35%",
             "data":null,
             "orderable": false,
             "searchable":false,
@@ -131,13 +150,16 @@
         console.log(id);
 
         $.ajax({
-          type:"GET",
-          url:"/suppliers/delete/" + id,
+          headers: {
+            'X-CSRF-TOKEN': _token
+          },
+          type:'DELETE',
+          url:'/products/' + id,
           success:function(data){
               if(data.errors != undefined && data.errors.length > 0){
                 showErrorMessage(data.errors);
               }else{
-                toastr.success('Supplier was deleted','Success', {timeOut: 1000});
+                toastr.success('Product was deleted','Success', {timeOut: 1000});
                 $("#btnCancel").click();
                 table.ajax.reload();
               }
@@ -151,8 +173,8 @@
 
     });
 
-    function editSupplier(id){
-      window.location.href = '/suppliers/edit/' + id;
+    function editProduct(id){
+      window.location.href = '/products/' + id + '/edit';
     }
 
     function showDeleteConfirmation(id){
@@ -167,4 +189,4 @@
             toastr.error(errMessageContent, 'Error', {timeOut: 3000});
     }
   </script>
-@endsection()
+@endsection

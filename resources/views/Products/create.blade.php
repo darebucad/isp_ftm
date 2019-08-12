@@ -30,19 +30,19 @@
             </div>
 
             <div class="form-group">
+              <label class="col-md-5 col-sm-3 col-xs-12" for="category">Category<span class="required">*</span></label>
               <label class="col-md-5 col-sm-3 col-xs-12" for="brand">Brand</label>
-              <label class="col-md-5 col-sm-3 col-xs-12" for="category">Category</label>
             </div>
 
             <div class="form-group">
-              <div class="col-md-5 col-sm-3 col-xs-12">
-                <input type="text" name="brand" id="brand" class="form-control col-md-7 col-xs-12">
-              </div>
-
               <div class="col-md-5 col-sm-12 col-xs-12">
-                <select name="category" id="category" class="col-md-12 col-xs-12">
+                <select name="category" id="category" required="required" class="col-md-12 col-xs-12">
                   <option value=""></option>
                 </select>
+              </div>
+
+              <div class="col-md-5 col-sm-3 col-xs-12">
+                <input type="text" name="brand" id="brand" class="form-control col-md-7 col-xs-12">
               </div>
             </div>
 
@@ -77,15 +77,15 @@
             </div>
 
             <div class="form-group">
-              <label class="col-md-2 col-sm-2 col-xs-12" for="Purchase Price">Purchase Price</label>
-              <div class="col-md-3 col-sm-3 col-xs-12 form-group has-feedback">
-                <input type="text" class="form-control" name="purchase_price" id="purchase_price">
-                <span class="fa fa-dollar form-control-feedback right" aria-hidden="true"></span>
-              </div>
-
               <label class="col-md-2 col-sm-2 col-xs-12" for="unit_price">Unit Price<span class="required">*</span></label>
               <div class="col-md-3 col-sm-3 col-xs-12 form-group has-feedback">
                 <input type="text" class="form-control" name="unit_price" id="unit_price" required="required">
+                <span class="fa fa-dollar form-control-feedback right" aria-hidden="true"></span>
+              </div>
+
+              <label class="col-md-2 col-sm-2 col-xs-12" for="Purchase Price">Purchase Price</label>
+              <div class="col-md-3 col-sm-3 col-xs-12 form-group has-feedback">
+                <input type="text" class="form-control" name="purchase_price" id="purchase_price">
                 <span class="fa fa-dollar form-control-feedback right" aria-hidden="true"></span>
               </div>
             </div>

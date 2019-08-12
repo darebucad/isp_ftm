@@ -4,9 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Validator;
 
 use App\Product;
+use App\Categories;
+use App\Supplier;
+use App\Warehouse;
+use App\Sections;
 
 use Carbon\Carbon;
 
@@ -46,15 +51,17 @@ class ProductController extends Controller
       $current_time = Carbon::now('Asia/Manila');
 
         $messages = [
-          'name.required' => 'Please enter product name',
+          'name.required' => 'Please enter a product name',
           'name.unique' => 'Product name already exist',
-          'content.required' => 'Please enter content value',
-          'unit_price.required' => 'Please enter unit price',
+          'category.required' => 'Please select a category',
+          'content.required' => 'Please enter a content value',
+          'unit_price.required' => 'Please enter a unit price',
         ];
 
         $validator = Validator::make($request->all(),
             [
                 'name' => 'required|unique:products',
+                'category_id' => 'required',
                 'content'  => 'required',
                 'unit_price' => 'required',
             ], $messages
@@ -111,7 +118,13 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
-        //
+        $product = Product::findOrFail($id);
+        $categories = Categories::all();
+        $suppliers = Supplier::all();
+        $warehouses = Warehouse::all();
+        $sections = Sections::all();
+
+        return view('products.edit', ['product' => $product, 'categories' => $categories, 'suppliers' => $suppliers, 'warehouses' => $warehouses, 'sections' => $sections]);
     }
 
     /**
@@ -123,7 +136,55 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+      $user_id = Auth::id();
+      $current_time = Carbon::now('Asia/Manila');
+
+        $messages = [
+          'name.required' => 'Please enter a product name',
+          'category.required' => 'Please select a category',
+          'content.required' => 'Please enter a content value',
+          'unit_price.required' => 'Please enter a unit price',
+        ];
+
+        $validator = Validator::make($request->all(),
+            [
+                'name' => 'required|unique:products,name,'. $id,
+                'category_id' => 'required',
+                'content'  => 'required',
+                'unit_price' => 'required',
+            ], $messages
+        );
+
+        if ($validator->fails()) {
+          return response()->json(['errors'=>$validator->errors()->all()]);
+        } else {
+
+          $product = Product::findOrFail($id);
+          $product->name = $request->input('name');
+          $product->brand = $request->input('brand');
+          $product->category_id = $request->input('category_id');
+          $product->description = $request->input('description');
+          $product->content = $request->input('content');
+          $product->net_weight = $request->input('net_weight');
+          $product->stock_on_hand = $request->input('stock_on_hand');
+          $product->purchase_price = $request->input('purchase_price');
+          $product->unit_price = $request->input('unit_price');
+          $product->supplier_id = $request->input('supplier_id');
+          $product->warehouse_id = $request->input('warehouse_id');
+          $product->section_id = $request->input('section_id');
+          $product->created_at = $current_time->toDateTimeString();
+          $product->user_id = $user_id;
+          // dd($product);
+          $product->save();
+
+        }
+
+        $response = array(
+          'success' => 'Product was successfully edited',
+          'errors' => []
+        );
+
+        return response()->json($response);
     }
 
     /**
@@ -134,6 +195,14 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $product = Product::find($id);
+        $product->delete();
+
+        $response = array(
+          'success' => 'Product was successfully deleted',
+          'errors' => [],
+        );
+
+        return response()->json($response);
     }
 }

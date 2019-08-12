@@ -15,7 +15,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <!-- Meta, title, CSS, favicons, etc. -->
 
-	  <link rel="icon" href="images/favicon.ico" type="image/ico" />
+	  <!-- <link rel="icon" href="images/favicon.ico" type="image/ico" /> -->
 
     <!-- Bootstrap -->
     <link href="{{asset('css/bootstrap.min.css')}}" rel="stylesheet">
@@ -44,7 +44,7 @@
         <div class="col-md-3 left_col">
           <div class="left_col scroll-view">
             <div class="navbar nav_title" style="border: 0;">
-              <a href="index.html" class="site_title"><i class="fa fa-paw"></i> <span>Gentelella Alela!</span></a>
+              <a href="{{ route('home') }}" class="site_title"><i class="fa fa-paw"></i> <span>Gentelella Alela!</span></a>
             </div>
 
             <div class="clearfix"></div>
@@ -79,8 +79,8 @@
                       <li><a href="/Categories">Product Categories</a></li>
                       <li><a href="/Warehouse">Warehouse</a></li>
                       <li><a href="/Section">Section</a></li>
-                      <li><a href="{{ url('/products') }}">Products</a></li>
-                      <li><a href="{{ url('/suppliers') }}">Suppliers</a></li>
+                      <li><a href="/products">Products</a></li>
+                      <li><a href="/suppliers">Suppliers</a></li>
                     </ul>
                   </li>
                 </ul>
