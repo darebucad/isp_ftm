@@ -25,7 +25,7 @@
 
             <div class="form-group">
               <div class="col-md-10 col-sm-10 col-xs-12">
-                <input type="text" name="product" id="product" required="required" class="form-control" autofocus>
+                <input type="text" name="product" id="product" required="required" class="form-control" autofocus />
               </div>
             </div>
 
@@ -36,7 +36,7 @@
 
             <div class="form-group">
               <div class="col-md-5 col-sm-3 col-xs-12">
-                <input type="text" name="brand" id="brand" required="required" class="form-control col-md-7 col-xs-12">
+                <input type="text" name="brand" id="brand" class="form-control col-md-7 col-xs-12">
               </div>
 
               <div class="col-md-5 col-sm-12 col-xs-12">
@@ -47,7 +47,7 @@
             </div>
 
             <div class="form-group">
-              <label class="col-md-3 col-sm-3 col-xs-12" for="description">Description<span class="required">*</span></label>
+              <label class="col-md-3 col-sm-3 col-xs-12" for="description">Description</label>
             </div>
 
             <div class="form-group">
@@ -57,7 +57,7 @@
             </div>
 
             <div class="form-group">
-              <label class="col-md-3 col-sm-3 col-xs-12" for="content">Content</label>
+              <label class="col-md-3 col-sm-3 col-xs-12" for="content">Content<span class="required">*</span></label>
               <label class="col-md-3 col-sm-3 col-xs-12" for="net_weight">Net Weight</label>
               <label class="col-md-3 col-sm-3 col-xs-12" for="stock_on_hand">Stock on Hand</label>
             </div>
@@ -68,22 +68,22 @@
               </div>
 
               <div class="col-md-3 col-sm-3 col-xs-12">
-                <input type="text" name="net_weight" id="net_weight" required="required" class="form-control col-md-7 col-xs-12">
+                <input type="text" name="net_weight" id="net_weight" class="form-control col-md-7 col-xs-12">
               </div>
 
               <div class="col-md-4 col-sm-4 col-xs-12">
-                <input type="text" name="stock_on_hand" id="stock_on_hand" required="required" class="form-control col-md-7 col-xs-12">
+                <input type="text" name="stock_on_hand" id="stock_on_hand" class="form-control col-md-7 col-xs-12">
               </div>
             </div>
 
             <div class="form-group">
               <label class="col-md-2 col-sm-2 col-xs-12" for="Purchase Price">Purchase Price</label>
               <div class="col-md-3 col-sm-3 col-xs-12 form-group has-feedback">
-                <input type="text" class="form-control" name="purchase_price" id="purchase_price" required="required">
+                <input type="text" class="form-control" name="purchase_price" id="purchase_price">
                 <span class="fa fa-dollar form-control-feedback right" aria-hidden="true"></span>
               </div>
 
-              <label class="col-md-2 col-sm-2 col-xs-12" for="unit_price">Unit Price</label>
+              <label class="col-md-2 col-sm-2 col-xs-12" for="unit_price">Unit Price<span class="required">*</span></label>
               <div class="col-md-3 col-sm-3 col-xs-12 form-group has-feedback">
                 <input type="text" class="form-control" name="unit_price" id="unit_price" required="required">
                 <span class="fa fa-dollar form-control-feedback right" aria-hidden="true"></span>
@@ -256,31 +256,52 @@
 
 
       $('#btnSubmit').on('click', function(){
-          var _token = CSRF_TOKEN;
-          var name = $('#supplier').val();
-          var address = $('#address').val();
+          // var _token = CSRF_TOKEN;
+          var name = $('#product').val();
+          var brand = $('#brand').val();
+          var category_id = $('#category').val();
+          var description  = $('#description').val();
+          var content = $('#content').val();
+          var net_weight = $('#net_weight').val();
+          var stock_on_hand = $('#stock_on_hand').val();
+          var purchase_price = $('#purchase_price').val();
+          var unit_price = $('#unit_price').val();
+          var supplier_id = $('#supplier').val();
+          var warehouse_id = $('#warehouse').val();
+          var section_id = $('#section').val();
+
           var data= {};
 
-          data.id = 0;
+          // data.id = 0;
           data.name = name;
-          data.address = address;
+          data.brand = brand;
+          data.category_id = category_id;
+          data.description = description;
+          data.content = content;
+          data.net_weight = net_weight;
+          data.stock_on_hand = stock_on_hand;
+          data.purchase_price = purchase_price;
+          data.unit_price = unit_price;
+          data.supplier_id = supplier_id;
+          data.warehouse_id = warehouse_id;
+          data.section_id = section_id;
 
         $.ajax({
           headers: {
             'X-CSRF-TOKEN': _token
           },
+          url: '/products',
           type: "POST",
-          url: "/suppliers/store",
           data: data,
-          dataType: "JSON",
+          dataType: 'JSON',
           success: function(data){
             if (data.errors != undefined && data.errors.length > 0) {
               showErrorMessage(data.errors);
 
             } else {
-              toastr.success('New supplier was created', 'Success', {timeout: 1000});
+              toastr.success('New product was created', 'Success', {timeout: 1000});
               window.setTimeout(function(){
-                window.location.href = '/suppliers';
+                window.location.href = '/products';
               }, 1000);
             }
           },

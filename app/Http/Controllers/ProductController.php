@@ -3,6 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Validator;
+
+use App\Product;
+
+use Carbon\Carbon;
 
 class ProductController extends Controller
 {
@@ -36,7 +42,54 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+      $user_id = Auth::id();
+      $current_time = Carbon::now('Asia/Manila');
+
+        $messages = [
+          'name.required' => 'Please enter product name',
+          'name.unique' => 'Product name already exist',
+          'content.required' => 'Please enter content value',
+          'unit_price.required' => 'Please enter unit price',
+        ];
+
+        $validator = Validator::make($request->all(),
+            [
+                'name' => 'required|unique:products',
+                'content'  => 'required',
+                'unit_price' => 'required',
+            ], $messages
+        );
+
+        if ($validator->fails()) {
+          return response()->json(['errors'=>$validator->errors()->all()]);
+        } else {
+
+          $product = new Product();
+          $product->name = $request->input('name');
+          $product->brand = $request->input('brand');
+          $product->category_id = $request->input('category_id');
+          $product->description = $request->input('description');
+          $product->content = $request->input('content');
+          $product->net_weight = $request->input('net_weight');
+          $product->stock_on_hand = $request->input('stock_on_hand');
+          $product->purchase_price = $request->input('purchase_price');
+          $product->unit_price = $request->input('unit_price');
+          $product->supplier_id = $request->input('supplier_id');
+          $product->warehouse_id = $request->input('warehouse_id');
+          $product->section_id = $request->input('section_id');
+          $product->created_at = $current_time->toDateTimeString();
+          $product->user_id = $user_id;
+          // dd($product);
+          $product->save();
+
+        }
+
+        $response = array(
+          'success' => 'New product was successfully added',
+          'errors' => []
+        );
+
+        return response()->json($response);
     }
 
     /**
