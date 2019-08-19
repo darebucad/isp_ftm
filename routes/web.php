@@ -38,10 +38,12 @@ Route::get('/api/getSuppliers', 'APIController@getSuppliers')->name('api.getSupp
 Route::get('/api/getWarehouse', 'APIController@getWarehouse')->name('api.getWarehouse');
 Route::get('/api/getSections', 'APIController@getSections')->name('api.getSections');
 Route::get('/api/getProducts', 'APIController@getProducts')->name('api.getProducts');
+Route::get('/api/getBrands', 'APIController@getBrands')->name('api.getBrands');
 Route::get('/api/searchCategories', 'APIController@searchCategories')->name('api.searchCategories');
 Route::get('/api/searchSuppliers', 'APIController@searchSuppliers')->name('api.searchSuppliers');
 Route::get('/api/searchWarehouse', 'APIController@searchWarehouse')->name('api.searchWarehouse');
 Route::get('/api/searchSections', 'APIController@searchSections')->name('api.searchSections');
+
 
 
 // Suppliers
@@ -70,3 +72,6 @@ Route::get('/Section/Edit/{id}','SectionController@Show');
 Route::post('/Section/AddSection', 'SectionController@Store');
 Route::match(['put', 'patch'], '/Section/EditSection/{id}','SectionController@Update');
 Route::get('/Section/Delete/{id}','SectionController@Destroy');
+
+//Brand
+Route::resource('brands', 'BrandController');
