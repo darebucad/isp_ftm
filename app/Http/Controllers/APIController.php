@@ -56,7 +56,8 @@ class APIController extends Controller
         ->leftjoin('warehouse AS w', 'w.id', '=', 'p.warehouse_id')
         ->leftjoin('sections AS se', 'se.id', '=', 'p.supplier_id')
         ->leftjoin('users AS u', 'u.id', '=', 'p.user_id')
-        ->select('p.id', 'p.name', 'p.description', 'p.brand', 'p.content', 'p.net_weight', 'p.stock_on_hand', 'p.purchase_price', 'p.unit_price',
+        ->leftjoin('brand AS b', 'b.id', '=', 'p.brand_id')
+        ->select('p.id', 'p.name', 'p.description', 'b.name AS brand','p.content', 'p.net_weight', 'p.stock_on_hand', 'p.purchase_price', 'p.unit_price',
        'c.name AS category', 's.name AS supplier', 'w.name AS warehouse', 'se.name AS section', 'u.name AS user', 'p.created_at', 'p.updated_at');
 
        return datatables($query)->make(true);
@@ -123,6 +124,22 @@ class APIController extends Controller
 
       $response = array(
         'items'  =>  $sections
+      );
+
+      return response()->json($response);
+    }
+
+    // Search list of brands
+    public function searchBrands(Request $request){
+      $term = $request->q;
+
+      $brands = Brand::where('name', 'LIKE', '%' . $term . '%')
+      ->select('id', 'name AS text')
+      ->orderBy('name', 'ASC')
+      ->get();
+
+      $response = array(
+        'items' => $brands
       );
 
       return response()->json($response);

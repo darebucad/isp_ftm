@@ -22,6 +22,7 @@
             <input type="hidden" name="supplier_id" value="{{ $product->supplier_id }}" id="supplier_id">
             <input type="hidden" name="warehouse_id" value="{{ $product->warehouse_id }}" id="warehouse_id">
             <input type="hidden" name="section_id" value="{{ $product->section_id }}" id="section_id">
+            <input type="hidden" name="brand_id" value="{{ $product->brand_id }}" id="brand_id">
 
             <div class="form-group">
               <label class="col-md-3 col-sm-3 col-xs-12" for="product">Name<span class="required">*</span></label>
@@ -49,7 +50,12 @@
               </div>
 
               <div class="col-md-5 col-sm-3 col-xs-12">
-                <input type="text" name="brand" id="brand" value="{{ $product->brand }}" class="form-control col-md-7 col-xs-12">
+                <select class="col-md-12 col-xs-12" name="brand" id="brand" required="required">
+                  <option value=""></option>
+                  @foreach ($brands as $brand)
+                    <option value="{{ $brand->id }}">{{ $brand->name }}</option>
+                  @endforeach
+                </select>
               </div>
             </div>
 
@@ -160,6 +166,7 @@
       var supplier_id = $('#supplier_id').val();
       var warehouse_id = $('#warehouse_id').val();
       var section_id = $('#section_id').val();
+      var brand_id = $('#brand_id').val();
 
       // Category
       $('#category').select2({
@@ -193,11 +200,18 @@
 
       $('#section').trigger('change');
 
+      // Brand
+      $('#brand').select2({
+        placeholder: 'Select a brand',
+        allowClear: true
+      }).val(brand_id);
+
+      $('#brand').trigger('change');
+
 
       $('#btnSubmit').on('click', function(){
           var product_id = $('#product_id').val();
           var name = $('#product').val();
-          var brand = $('#brand').val();
           var category_id = $('#category').val();
           var description  = $('#description').val();
           var content = $('#content').val();
@@ -208,12 +222,12 @@
           var supplier_id = $('#supplier').val();
           var warehouse_id = $('#warehouse').val();
           var section_id = $('#section').val();
+          var brand_id = $('#brand').val();
 
           var data= {};
 
           data.id = product_id;
           data.name = name;
-          data.brand = brand;
           data.category_id = category_id;
           data.description = description;
           data.content = content;
@@ -224,6 +238,7 @@
           data.supplier_id = supplier_id;
           data.warehouse_id = warehouse_id;
           data.section_id = section_id;
+          data.brand_id = brand_id;
 
         $.ajax({
           headers: {

@@ -43,7 +43,7 @@ Route::get('/api/searchCategories', 'APIController@searchCategories')->name('api
 Route::get('/api/searchSuppliers', 'APIController@searchSuppliers')->name('api.searchSuppliers');
 Route::get('/api/searchWarehouse', 'APIController@searchWarehouse')->name('api.searchWarehouse');
 Route::get('/api/searchSections', 'APIController@searchSections')->name('api.searchSections');
-
+Route::get('/api/searchBrands', 'APIController@searchBrands');
 
 
 // Suppliers

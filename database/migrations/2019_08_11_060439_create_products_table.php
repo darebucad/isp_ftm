@@ -17,7 +17,6 @@ class CreateProductsTable extends Migration
           $table->bigIncrements('id');
           $table->string('name');
           $table->string('description')->nullable();
-          $table->string('brand')->nullable();
           $table->double('content', 8, 2);
           $table->double('net_weight', 8, 2)->nullable();
           $table->double('stock_on_hand', 8, 2)->nullable();
@@ -33,6 +32,8 @@ class CreateProductsTable extends Migration
           $table->foreign('section_id')->references('id')->on('sections');
           $table->unsignedBigInteger('user_id');
           $table->foreign('user_id')->references('id')->on('users');
+          $table->unsignedBigInteger('brand_id')->nullable();
+          $table->foreign('brand_id')->references('id')->on('brand');
           $table->timestamps();
         });
     }

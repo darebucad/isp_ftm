@@ -81,6 +81,17 @@
                       <li><a href="/Section">Section</a></li>
                       <li><a href="/products">Products</a></li>
                       <li><a href="/suppliers">Suppliers</a></li>
+                      <li><a href="#">Brand</a></li>
+                    </ul>
+                  </li>
+
+                  <li><a><i class="fa fa-edit"></i> Orders <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="#">Product Categories</a></li>
+                      <li><a href="#">Warehouse</a></li>
+                      <li><a href="#">Section</a></li>
+                      <li><a href="#">Products</a></li>
+                      <li><a href="#">Suppliers</a></li>
                     </ul>
                   </li>
                 </ul>

@@ -12,6 +12,7 @@ use App\Categories;
 use App\Supplier;
 use App\Warehouse;
 use App\Sections;
+use App\Brand;
 
 use Carbon\Carbon;
 
@@ -73,7 +74,6 @@ class ProductController extends Controller
 
           $product = new Product();
           $product->name = $request->input('name');
-          $product->brand = $request->input('brand');
           $product->category_id = $request->input('category_id');
           $product->description = $request->input('description');
           $product->content = $request->input('content');
@@ -84,6 +84,7 @@ class ProductController extends Controller
           $product->supplier_id = $request->input('supplier_id');
           $product->warehouse_id = $request->input('warehouse_id');
           $product->section_id = $request->input('section_id');
+          $product->brand_id = $request->input('brand_id');
           $product->created_at = $current_time->toDateTimeString();
           $product->user_id = $user_id;
           // dd($product);
@@ -123,8 +124,9 @@ class ProductController extends Controller
         $suppliers = Supplier::all();
         $warehouses = Warehouse::all();
         $sections = Sections::all();
+        $brands = Brand::all();
 
-        return view('products.edit', ['product' => $product, 'categories' => $categories, 'suppliers' => $suppliers, 'warehouses' => $warehouses, 'sections' => $sections]);
+        return view('products.edit', ['product' => $product, 'categories' => $categories, 'suppliers' => $suppliers, 'warehouses' => $warehouses, 'sections' => $sections, 'brands' => $brands]);
     }
 
     /**
@@ -161,7 +163,6 @@ class ProductController extends Controller
 
           $product = Product::findOrFail($id);
           $product->name = $request->input('name');
-          $product->brand = $request->input('brand');
           $product->category_id = $request->input('category_id');
           $product->description = $request->input('description');
           $product->content = $request->input('content');
@@ -172,6 +173,7 @@ class ProductController extends Controller
           $product->supplier_id = $request->input('supplier_id');
           $product->warehouse_id = $request->input('warehouse_id');
           $product->section_id = $request->input('section_id');
+          $product->brand_id = $request->input('brand_id');
           $product->created_at = $current_time->toDateTimeString();
           $product->user_id = $user_id;
           // dd($product);

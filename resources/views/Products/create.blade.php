@@ -42,7 +42,9 @@
               </div>
 
               <div class="col-md-5 col-sm-3 col-xs-12">
-                <input type="text" name="brand" id="brand" class="form-control col-md-7 col-xs-12">
+                <select class="col-md-12 col-xs-12" name="brand" id="brand" required="required">
+                  <option value=""></option>
+                </select>
               </div>
             </div>
 
@@ -227,10 +229,39 @@
 
 
       $('#section').select2({
-        placeholder: "Select a sections",
+        placeholder: "Select a section",
         allowClear: true,
         ajax: {
           url: '/api/searchSections', //'https://api.github.com/search/repositories',
+          dataType: 'JSON',
+          delay: 200,
+          data: function (params){
+            return {
+              q: params.term,
+              page: params.page
+            };
+          },
+          processResults: function(data, params){
+            params.page = params.page || 1;
+
+            return {
+              results: data.items,
+              pagination: {
+                more: (params.page = 10) < data.total
+              }
+            };
+          },
+          cache: true
+        },
+
+      });
+
+
+      $('#brand').select2({
+        placeholder: "Select a brand",
+        allowClear: true,
+        ajax: {
+          url: '/api/searchBrands', //'https://api.github.com/search/repositories',
           dataType: 'JSON',
           delay: 200,
           data: function (params){
@@ -294,7 +325,6 @@
       $('#btnSubmit').on('click', function(){
           // var _token = CSRF_TOKEN;
           var name = $('#product').val();
-          var brand = $('#brand').val();
           var category_id = $('#category').val();
           var description  = $('#description').val();
           var content = $('#content').val();
@@ -305,12 +335,12 @@
           var supplier_id = $('#supplier').val();
           var warehouse_id = $('#warehouse').val();
           var section_id = $('#section').val();
+          var brand_id = $('#brand').val();
 
           var data= {};
 
           // data.id = 0;
           data.name = name;
-          data.brand = brand;
           data.category_id = category_id;
           data.description = description;
           data.content = content;
@@ -321,6 +351,7 @@
           data.supplier_id = supplier_id;
           data.warehouse_id = warehouse_id;
           data.section_id = section_id;
+          data.brand_id = brand_id;
 
         $.ajax({
           headers: {
