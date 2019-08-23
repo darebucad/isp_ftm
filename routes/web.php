@@ -75,3 +75,6 @@ Route::get('/Section/Delete/{id}','SectionController@Destroy');
 
 //Brand
 Route::resource('brands', 'BrandController');
+
+// Purchases
+Route::resource('purchases', 'PurchaseController');

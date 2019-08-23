@@ -74,24 +74,29 @@
                       <li><a href="/">Dashboard</a></li>
                     </ul>
                   </li>
-                  <li><a><i class="fa fa-edit"></i> Products <span class="fa fa-chevron-down"></span></a>
-                    <ul class="nav child_menu">
-                      <li><a href="/Categories">Product Categories</a></li>
-                      <li><a href="/Warehouse">Warehouse</a></li>
-                      <li><a href="/Section">Section</a></li>
-                      <li><a href="/products">Products</a></li>
-                      <li><a href="/suppliers">Suppliers</a></li>
-                      <li><a href="#">Brand</a></li>
-                    </ul>
-                  </li>
 
-                  <li><a><i class="fa fa-edit"></i> Orders <span class="fa fa-chevron-down"></span></a>
+                  <li><a><i class="fa fa-edit"></i> Purchase Orders <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href="#">Product Categories</a></li>
-                      <li><a href="#">Warehouse</a></li>
+                      <li><a href="/purchases">Purchases</a></li>
+                      <li><a href="#">Orders</a></li>
                       <li><a href="#">Section</a></li>
                       <li><a href="#">Products</a></li>
                       <li><a href="#">Suppliers</a></li>
+                    </ul>
+                  </li>
+
+                  <li><a><i class="fa fa-edit"></i> Settings <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a>Products<span class="fa fa-chevron-down"></span></a>
+                        <ul class="nav child_menu">
+                          <li><a href="/Categories">Product Categories</a></li>
+                          <li><a href="/Warehouse">Warehouse</a></li>
+                          <li><a href="/Section">Section</a></li>
+                          <li><a href="/suppliers">Suppliers</a></li>
+                          <li><a href="#">Brand</a></li>
+                          <li><a href="/products">Products</a></li>
+                        </ul>
+                      </li>
                     </ul>
                   </li>
                 </ul>

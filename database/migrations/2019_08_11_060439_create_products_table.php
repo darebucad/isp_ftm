@@ -22,6 +22,7 @@ class CreateProductsTable extends Migration
           $table->double('stock_on_hand', 8, 2)->nullable();
           $table->double('purchase_price', 8, 2)->nullable();
           $table->double('unit_price', 8, 2);
+          $table->string('type', 1);
           $table->unsignedBigInteger('category_id');
           $table->foreign('category_id')->references('id')->on('categories');
           $table->unsignedBigInteger('supplier_id')->nullable();

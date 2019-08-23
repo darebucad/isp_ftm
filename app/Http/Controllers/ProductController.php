@@ -57,6 +57,7 @@ class ProductController extends Controller
           'category.required' => 'Please select a category',
           'content.required' => 'Please enter a content value',
           'unit_price.required' => 'Please enter a unit price',
+          'type.required' => 'Please select a type',
         ];
 
         $validator = Validator::make($request->all(),
@@ -65,6 +66,7 @@ class ProductController extends Controller
                 'category_id' => 'required',
                 'content'  => 'required',
                 'unit_price' => 'required',
+                'type' => 'required'
             ], $messages
         );
 
@@ -87,6 +89,7 @@ class ProductController extends Controller
           $product->brand_id = $request->input('brand_id');
           $product->created_at = $current_time->toDateTimeString();
           $product->user_id = $user_id;
+          $product->type = $request->input('type');
           // dd($product);
           $product->save();
 
@@ -146,6 +149,7 @@ class ProductController extends Controller
           'category.required' => 'Please select a category',
           'content.required' => 'Please enter a content value',
           'unit_price.required' => 'Please enter a unit price',
+          'type.required' => 'Please select a type',
         ];
 
         $validator = Validator::make($request->all(),
@@ -154,6 +158,7 @@ class ProductController extends Controller
                 'category_id' => 'required',
                 'content'  => 'required',
                 'unit_price' => 'required',
+                'type' => 'required',
             ], $messages
         );
 
@@ -176,6 +181,7 @@ class ProductController extends Controller
           $product->brand_id = $request->input('brand_id');
           $product->created_at = $current_time->toDateTimeString();
           $product->user_id = $user_id;
+          $product->type = $request->input('type');
           // dd($product);
           $product->save();
 

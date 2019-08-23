@@ -23,6 +23,7 @@
             <input type="hidden" name="warehouse_id" value="{{ $product->warehouse_id }}" id="warehouse_id">
             <input type="hidden" name="section_id" value="{{ $product->section_id }}" id="section_id">
             <input type="hidden" name="brand_id" value="{{ $product->brand_id }}" id="brand_id">
+            <input type="hidden" name="type_id" value="{{ $product->type }}" id="type_id">
 
             <div class="form-group">
               <label class="col-md-3 col-sm-3 col-xs-12" for="product">Name<span class="required">*</span></label>
@@ -90,13 +91,26 @@
             </div>
 
             <div class="form-group">
-              <label class="col-md-2 col-sm-2 col-xs-12" for="unit_price">Unit Price<span class="required">*</span></label>
+              <label class="col-md-3 col-sm-3 col-xs-12" for="type">Type<span class="required">*</span></label>
+              <label class="col-md-3 col-sm-3 col-xs-12" for="unit_price">Unit Price<span class="required">*</span></label>
+              <label class="col-md-3 col-sm-3 col-xs-12" for="Purchase Price">Purchase Price</label>
+
+            </div>
+
+            <div class="form-group">
+              <div class="col-md-3 col-sm-3 col-xs-12 form-group has-feedback">
+                <select name="type" id="type" class="col-md-12 col-xs-12">
+                  <option value=""></option>
+                  <option value="0">Raw Material</option>
+                  <option value="1">Finished Product</option>
+                </select>
+              </div>
+
               <div class="col-md-3 col-sm-3 col-xs-12 form-group has-feedback">
                 <input type="text" class="form-control" name="unit_price" id="unit_price" value="{{ $product->unit_price }}" required="required">
                 <span class="fa fa-dollar form-control-feedback right" aria-hidden="true"></span>
               </div>
 
-              <label class="col-md-2 col-sm-2 col-xs-12" for="Purchase Price">Purchase Price</label>
               <div class="col-md-3 col-sm-3 col-xs-12 form-group has-feedback">
                 <input type="text" class="form-control" name="purchase_price" id="purchase_price" value="{{ $product->purchase_price }}">
                 <span class="fa fa-dollar form-control-feedback right" aria-hidden="true"></span>
@@ -167,6 +181,7 @@
       var warehouse_id = $('#warehouse_id').val();
       var section_id = $('#section_id').val();
       var brand_id = $('#brand_id').val();
+      var type_id = $('#type_id').val();
 
       // Category
       $('#category').select2({
@@ -208,6 +223,13 @@
 
       $('#brand').trigger('change');
 
+      // Type
+      $('#type').select2({
+        placeholder: 'Select a type',
+        allowClear: true
+      }).val(type_id);
+      $('#type').trigger('change');
+
 
       $('#btnSubmit').on('click', function(){
           var product_id = $('#product_id').val();
@@ -223,6 +245,7 @@
           var warehouse_id = $('#warehouse').val();
           var section_id = $('#section').val();
           var brand_id = $('#brand').val();
+          var type = $('#type').val();
 
           var data= {};
 
@@ -239,6 +262,7 @@
           data.warehouse_id = warehouse_id;
           data.section_id = section_id;
           data.brand_id = brand_id;
+          data.type = type;
 
         $.ajax({
           headers: {
