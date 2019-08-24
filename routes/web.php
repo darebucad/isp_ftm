@@ -37,7 +37,7 @@ Route::get('/api/getCategories', 'APIController@getCategories')->name("api.getCa
 Route::get('/api/getSuppliers', 'APIController@getSuppliers')->name('api.getSuppliers');
 Route::get('/api/getWarehouse', 'APIController@getWarehouse')->name('api.getWarehouse');
 Route::get('/api/getSections', 'APIController@getSections')->name('api.getSections');
-Route::get('/api/getProducts', 'APIController@getProducts')->name('api.getProducts');
+Route::get('/api/getProducts/{type}', 'APIController@getProducts')->name('api.getProducts');
 Route::get('/api/getBrands', 'APIController@getBrands')->name('api.getBrands');
 Route::get('/api/getStores', 'APIController@getStores')->name('api.getStores');
 Route::get('/api/searchCategories', 'APIController@searchCategories')->name('api.searchCategories');
