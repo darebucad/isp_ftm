@@ -33,8 +33,8 @@ class CreateProductsTable extends Migration
           $table->foreign('section_id')->references('id')->on('sections');
           $table->unsignedBigInteger('user_id');
           $table->foreign('user_id')->references('id')->on('users');
-          $table->unsignedBigInteger('brand_id')->nullable();
-          $table->foreign('brand_id')->references('id')->on('brand');
+        //   $table->unsignedBigInteger('brand_id')->nullable();
+        //   $table->foreign('brand_id')->references('Id')->on('brand');
           $table->timestamps();
         });
     }

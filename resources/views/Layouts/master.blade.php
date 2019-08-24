@@ -93,9 +93,12 @@
                           <li><a href="/Warehouse">Warehouse</a></li>
                           <li><a href="/Section">Section</a></li>
                           <li><a href="/suppliers">Suppliers</a></li>
-                          <li><a href="#">Brand</a></li>
+                          <li><a href="/brands">Brand</a></li>
                           <li><a href="/products">Products</a></li>
                         </ul>
+                      </li>
+                      <li>
+                        <a href="/stores">Store</a>
                       </li>
                     </ul>
                   </li>

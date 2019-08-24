@@ -11,6 +11,7 @@ use App\Warehouse;
 use App\Sections;
 use App\Product;
 use App\Brand;
+use App\Store;
 
 class APIController extends Controller
 {
@@ -44,6 +45,13 @@ class APIController extends Controller
     // Get the brands
     public function getBrands(){
       $query = Brand::select('Id','Name','Description');
+      return datatables($query)->make(true);
+    }
+
+
+    // Get the stores
+    public function getStores(){
+      $query = Store::select('Id','Name','Address');
       return datatables($query)->make(true);
     }
 
