@@ -23,7 +23,7 @@ class PurchaseController extends Controller
      */
     public function create()
     {
-        //
+        return view('purchases.create');
     }
 
     /**

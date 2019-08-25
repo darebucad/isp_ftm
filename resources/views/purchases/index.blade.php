@@ -14,13 +14,13 @@
           <h2>Purchases</h2>
           <ul class="nav navbar-right panel_toolbox">
             <li>
-                <input type="button" class="btn btn-primary" value="New" onclick="" />
+                <input type="button" class="btn btn-primary" value="New" onclick="window.location.href='/purchases/create'" />
             </li>
           </ul>
           <div class="clearfix"></div>
         </div>
         <div class="x_content">
-          <table class="table" id="products">
+          <table class="table" id="purchases">
             <thead>
               <tr>
                 <th>Name</th>

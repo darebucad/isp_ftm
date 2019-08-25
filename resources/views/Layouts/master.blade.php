@@ -79,9 +79,6 @@
                     <ul class="nav child_menu">
                       <li><a href="/purchases">Purchases</a></li>
                       <li><a href="#">Orders</a></li>
-                      <li><a href="#">Section</a></li>
-                      <li><a href="#">Products</a></li>
-                      <li><a href="#">Suppliers</a></li>
                     </ul>
                   </li>
 
