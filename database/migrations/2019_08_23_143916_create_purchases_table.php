@@ -16,8 +16,8 @@ class CreatePurchasesTable extends Migration
         Schema::create('purchases', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('status')->nullable();
-            $table->timestamp('date_ordered')->nullable();
-            $table->timestamp('date_received')->nullable();
+            $table->timestamp('order_date')->nullable();
+            $table->timestamp('delivery_date')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();

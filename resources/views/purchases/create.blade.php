@@ -19,121 +19,62 @@
           <form id="products" data-parsley-validate="" class="form-horizontal form-label-left" novalidate="">
             @csrf
 
+
             <div class="form-group">
-              <label class="col-md-3 col-sm-3 col-xs-12" for="product">Name<span class="required">*</span></label>
+              <label class="col-md-4 col-sm-3 col-xs-12" for="order_date">Order Date<span class="required">*</span></label>
+              <label class="col-md-5 col-sm-3 col-xs-12" for="supplier">Supplier<span class="required">*</span></label>
+              <label class="col-md-2 col-sm-3 col-xs-12" for="status">Status</span></label>
             </div>
 
             <div class="form-group">
-              <div class="col-md-10 col-sm-10 col-xs-12">
-                <input type="text" name="product" id="product" required="required" class="form-control" autofocus />
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label class="col-md-5 col-sm-3 col-xs-12" for="category">Category<span class="required">*</span></label>
-              <label class="col-md-5 col-sm-3 col-xs-12" for="brand">Brand</label>
-            </div>
-
-            <div class="form-group">
-              <div class="col-md-5 col-sm-12 col-xs-12">
-                <select name="category" id="category" required="required" class="col-md-12 col-xs-12">
-                  <option value=""></option>
-                </select>
-              </div>
-
-              <div class="col-md-5 col-sm-3 col-xs-12">
-                <select class="col-md-12 col-xs-12" name="brand" id="brand" required="required">
-                  <option value=""></option>
-                </select>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label class="col-md-3 col-sm-3 col-xs-12" for="description">Description</label>
-            </div>
-
-            <div class="form-group">
-              <div class="col-md-10 col-sm-6 col-xs-12">
-                <textarea class="form-control" rows="2" placeholder="" id="description"></textarea>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label class="col-md-3 col-sm-3 col-xs-12" for="content">Content<span class="required">*</span></label>
-              <label class="col-md-3 col-sm-3 col-xs-12" for="net_weight">Net Weight</label>
-              <label class="col-md-3 col-sm-3 col-xs-12" for="stock_on_hand">Stock on Hand</label>
-            </div>
-
-            <div class="form-group">
-              <div class="col-md-3 col-sm-3 col-xs-12">
-                <input type="text" name="content" id="content" required="required" class="form-control col-md-7 col-xs-12">
+              <div class="col-md-4 col-sm-10 col-xs-12">
+                <fieldset>
+                  <div class="control-group">
+                    <div class="controls">
+                      <div class="col-md-11 xdisplay_inputx form-group has-feedback">
+                        <input type="text" class="form-control has-feedback-left" id="single_cal3" placeholder="First Name" aria-describedby="inputSuccess2Status3">
+                        <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
+                        <span id="inputSuccess2Status3" class="sr-only">(success)</span>
+                      </div>
+                    </div>
+                  </div>
+                </fieldset>
               </div>
 
-              <div class="col-md-3 col-sm-3 col-xs-12">
-                <input type="text" name="net_weight" id="net_weight" class="form-control col-md-7 col-xs-12">
-              </div>
-
-              <div class="col-md-4 col-sm-4 col-xs-12">
-                <input type="text" name="stock_on_hand" id="stock_on_hand" class="form-control col-md-7 col-xs-12">
-              </div>
-            </div>
-
-
-
-            <div class="form-group">
-              <label class="col-md-3 col-sm-3 col-xs-12" for="type">Type<span class="required">*</span></label>
-              <label class="col-md-3 col-sm-3 col-xs-12" for="unit_price">Unit Price<span class="required">*</span></label>
-              <label class="col-md-3 col-sm-3 col-xs-12" for="Purchase Price">Purchase Price</label>
-
-            </div>
-
-            <div class="form-group">
-              <div class="col-md-3 col-sm-3 col-xs-12 form-group has-feedback">
-                <select name="type" id="type" class="col-md-12 col-xs-12">
-                  <option value=""></option>
-                  <option value="0">Raw Material</option>
-                  <option value="1">Finished Product</option>
-                </select>
-              </div>
-
-              <div class="col-md-3 col-sm-3 col-xs-12 form-group has-feedback">
-                <input type="text" class="form-control" name="unit_price" id="unit_price" required="required">
-                <span class="fa fa-dollar form-control-feedback right" aria-hidden="true"></span>
-              </div>
-
-              <div class="col-md-3 col-sm-3 col-xs-12 form-group has-feedback">
-                <input type="text" class="form-control" name="purchase_price" id="purchase_price">
-                <span class="fa fa-dollar form-control-feedback right" aria-hidden="true"></span>
-              </div>
-
-            </div>
-
-            <div class="form-group">
-              <label class="col-md-4 col-sm-3 col-xs-12" for="supplier">Supplier</label>
-              <label class="col-md-4 col-sm-3 col-xs-12" for="warehouse">Warehouse</label>
-              <label class="col-md-4 col-sm-3 col-xs-12" for="section">Section</label>
-            </div>
-
-            <div class="form-group">
-              <div class="col-md-4 col-sm-8 col-xs-12">
+              <div class="col-md-5 col-sm-10 col-xs-12">
                 <select name="supplier" id="supplier" class="col-md-12 col-xs-12">
                   <option value=""></option>
                 </select>
               </div>
 
-              <div class="col-md-4 col-sm-8 col-xs-12">
-                <select name="warehouse" id="warehouse" class="col-md-12 col-xs-12">
+              <div class="col-md-2 col-sm-10 col-xs-12">
+                <select name="status" id="status" class="col-md-12 col-xs-12">
                   <option value=""></option>
-                </select>
-              </div>
-
-              <div class="col-md-4 col-sm-8 col-xs-12">
-                <select name="section" id="section" class="col-md-12 col-xs-12">
-                  <option value=""></option>
+                  <option value="N" selected>New</option>
+                  <option value="R">Received</option>
+                  <option value="C">Change Order</option>
+                  <option value="X">Cancelled</option>
+                  <option value="D">Done</option>
                 </select>
               </div>
             </div>
 
+            <div class="ln_solid"></div>
+
+            <div class="row">
+              <div class="col-md-12">
+                <table class="table table-striped" id="orders">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Raw Material</th>
+                      <th>Quantity</th>
+                      <th>Price</th>
+                    </tr>
+                  </thead>
+                </table>
+              </div>
+            </div>
 
             <div class="ln_solid"></div>
 
@@ -153,6 +94,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
   <!-- Select2 4.0.8 -->
   <script src="{{ asset('js/select2.min.js') }}"></script>
+  <!-- jquery.inputmask -->
+  <script src="{{ asset('js/jquery.inputmask.bundle.min.js') }}"></script>
 
   <script>
 
@@ -215,95 +158,38 @@
 
       });
 
-      $('#warehouse').select2({
-        placeholder: "Select a warehouse",
+      $('#status').select2({
+        placeholder: "Select a status",
         allowClear: true,
-        ajax: {
-          url: '/api/searchWarehouse', //'https://api.github.com/search/repositories',
-          dataType: 'JSON',
-          delay: 200,
-          data: function (params){
-            return {
-              q: params.term,
-              page: params.page
-            };
-          },
-          processResults: function(data, params){
-            params.page = params.page || 1;
-
-            return {
-              results: data.items,
-              pagination: {
-                more: (params.page = 10) < data.total
-              }
-            };
-          },
-          cache: true
-        },
-
       });
 
+      $('#supplier').on('select2:select', function(e){
+        console.log(e.params.data.id);
 
-      $('#section').select2({
-        placeholder: "Select a section",
-        allowClear: true,
-        ajax: {
-          url: '/api/searchSections', //'https://api.github.com/search/repositories',
-          dataType: 'JSON',
-          delay: 200,
-          data: function (params){
-            return {
-              q: params.term,
-              page: params.page
-            };
+        $.ajax({
+          headers: {
+            'X-CSRF-TOKEN': _token
           },
-          processResults: function(data, params){
-            params.page = params.page || 1;
-
-            return {
-              results: data.items,
-              pagination: {
-                more: (params.page = 10) < data.total
-              }
-            };
+          url: "/api/populateProducts/" + e.params.data.id,
+          dataType: "JSON",
+          success: function(data){
+            console.log(data);
+            $('#orders tr').not(':first').not(':last').remove();
+            var html = '';
+            for (var i = 0; i < data.length; i++) {
+              html += '<tr>' +
+                '<td>' + data[i].id + '</td>' +
+                '<td>' + data[i].name + '</td>' +
+                '<td>' + '1.00' + '</td>' +
+                '<td>' + data[i].unit_price + '</td>' +
+                '</tr>';
+            }
+            $('#orders tr').first().after(html);
           },
-          cache: true
-        },
+          error: function(data){
 
-      });
-
-
-      $('#brand').select2({
-        placeholder: "Select a brand",
-        allowClear: true,
-        ajax: {
-          url: '/api/searchBrands', //'https://api.github.com/search/repositories',
-          dataType: 'JSON',
-          delay: 200,
-          data: function (params){
-            return {
-              q: params.term,
-              page: params.page
-            };
-          },
-          processResults: function(data, params){
-            params.page = params.page || 1;
-
-            return {
-              results: data.items,
-              pagination: {
-                more: (params.page = 10) < data.total
-              }
-            };
-          },
-          cache: true
-        },
-
-      });
-
-      $('#type').select2({
-        placeholder: "Select a type",
-        allowClear: true,
+          }
+        });
       });
 
       // Restricts input for each element in the set of matched elements to the given inputFilter.

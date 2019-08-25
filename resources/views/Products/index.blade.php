@@ -11,7 +11,7 @@
     <div class="x_panel">
 
         <div class="x_title">
-          <h2>Products</h2>
+          <h2>Products - <span id="product_type">All</span> </h2>
           <ul class="nav navbar-right panel_toolbox">
             <li>
                 <input type="button" class="btn btn-primary" value="New" onclick="window.location.href='/products/create'" />

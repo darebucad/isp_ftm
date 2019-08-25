@@ -45,6 +45,7 @@ Route::get('/api/searchSuppliers', 'APIController@searchSuppliers')->name('api.s
 Route::get('/api/searchWarehouse', 'APIController@searchWarehouse')->name('api.searchWarehouse');
 Route::get('/api/searchSections', 'APIController@searchSections')->name('api.searchSections');
 Route::get('/api/searchBrands', 'APIController@searchBrands');
+Route::get('/api/populateProducts/{id}', 'APIController@populateProducts');
 
 
 // Suppliers

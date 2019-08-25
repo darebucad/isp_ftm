@@ -84,7 +84,7 @@
         "pageLength": 30,
         "processing": true,
         "serverSide": true,
-        "ajax": "{{route('api.getProducts')}}",
+        "ajax": "api/getProducts/-1",
         "columns":[
           {
             "width": "15%",

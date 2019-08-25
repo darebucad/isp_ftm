@@ -57,7 +57,7 @@ class APIController extends Controller
 
     // Get list of Products
     public function getProducts($type){
-      
+
       $query = DB::table('products AS p')
       ->leftjoin('categories AS c', 'c.id', '=', 'p.category_id')
       ->leftjoin('suppliers AS s', 's.id', '=', 'p.supplier_id')
@@ -67,7 +67,7 @@ class APIController extends Controller
       ->leftjoin('brand AS b', 'b.id', '=', 'p.brand_id')
       ->select('p.id', 'p.name', 'p.description', 'b.name AS brand','p.content', 'p.net_weight', 'p.stock_on_hand', 'p.purchase_price', 'p.unit_price',
      'c.name AS category', 's.name AS supplier', 'w.name AS warehouse', 'se.name AS section', 'u.name AS user', 'p.created_at', 'p.updated_at', 'p.type');
-     
+
 
       if($type === "0" || $type === 0){
         $query = DB::table('products AS p')
@@ -176,5 +176,13 @@ class APIController extends Controller
       );
 
       return response()->json($response);
+    }
+
+
+    // Populate list of products
+    public function populateProducts($id){
+      $products = Product::where('supplier_id', $id)->where('type', '0')->get();
+
+      return response()->json($products);
     }
 }
