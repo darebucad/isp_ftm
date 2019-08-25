@@ -11,6 +11,7 @@ use App\Warehouse;
 use App\Sections;
 use App\Product;
 use App\Brand;
+use App\Store;
 
 class APIController extends Controller
 {
@@ -47,18 +48,50 @@ class APIController extends Controller
       return datatables($query)->make(true);
     }
 
-    // Get list of Products
-    public function getProducts(){
 
+    // Get the stores
+    public function getStores(){
+      $query = Store::select('Id','Name','Address');
+      return datatables($query)->make(true);
+    }
+
+    // Get list of Products
+    public function getProducts($type){
+      
       $query = DB::table('products AS p')
+      ->leftjoin('categories AS c', 'c.id', '=', 'p.category_id')
+      ->leftjoin('suppliers AS s', 's.id', '=', 'p.supplier_id')
+      ->leftjoin('warehouse AS w', 'w.id', '=', 'p.warehouse_id')
+      ->leftjoin('sections AS se', 'se.id', '=', 'p.supplier_id')
+      ->leftjoin('users AS u', 'u.id', '=', 'p.user_id')
+      ->leftjoin('brand AS b', 'b.id', '=', 'p.brand_id')
+      ->select('p.id', 'p.name', 'p.description', 'b.name AS brand','p.content', 'p.net_weight', 'p.stock_on_hand', 'p.purchase_price', 'p.unit_price',
+     'c.name AS category', 's.name AS supplier', 'w.name AS warehouse', 'se.name AS section', 'u.name AS user', 'p.created_at', 'p.updated_at', 'p.type');
+     
+
+      if($type === "0" || $type === 0){
+        $query = DB::table('products AS p')
         ->leftjoin('categories AS c', 'c.id', '=', 'p.category_id')
         ->leftjoin('suppliers AS s', 's.id', '=', 'p.supplier_id')
         ->leftjoin('warehouse AS w', 'w.id', '=', 'p.warehouse_id')
         ->leftjoin('sections AS se', 'se.id', '=', 'p.supplier_id')
         ->leftjoin('users AS u', 'u.id', '=', 'p.user_id')
         ->leftjoin('brand AS b', 'b.id', '=', 'p.brand_id')
+        ->where('p.type', 0)
         ->select('p.id', 'p.name', 'p.description', 'b.name AS brand','p.content', 'p.net_weight', 'p.stock_on_hand', 'p.purchase_price', 'p.unit_price',
-       'c.name AS category', 's.name AS supplier', 'w.name AS warehouse', 'se.name AS section', 'u.name AS user', 'p.created_at', 'p.updated_at');
+       'c.name AS category', 's.name AS supplier', 'w.name AS warehouse', 'se.name AS section', 'u.name AS user', 'p.created_at', 'p.updated_at', 'p.type');
+      }else if ($type === "1" || $type === 1){
+        $query = DB::table('products AS p')
+        ->leftjoin('categories AS c', 'c.id', '=', 'p.category_id')
+        ->leftjoin('suppliers AS s', 's.id', '=', 'p.supplier_id')
+        ->leftjoin('warehouse AS w', 'w.id', '=', 'p.warehouse_id')
+        ->leftjoin('sections AS se', 'se.id', '=', 'p.supplier_id')
+        ->leftjoin('users AS u', 'u.id', '=', 'p.user_id')
+        ->leftjoin('brand AS b', 'b.id', '=', 'p.brand_id')
+        ->where('p.type', 1)
+        ->select('p.id', 'p.name', 'p.description', 'b.name AS brand','p.content', 'p.net_weight', 'p.stock_on_hand', 'p.purchase_price', 'p.unit_price',
+       'c.name AS category', 's.name AS supplier', 'w.name AS warehouse', 'se.name AS section', 'u.name AS user', 'p.created_at', 'p.updated_at', 'p.type');
+      }
 
        return datatables($query)->make(true);
     }

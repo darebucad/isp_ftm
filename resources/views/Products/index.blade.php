@@ -19,6 +19,16 @@
           </ul>
           <div class="clearfix"></div>
         </div>
+        <div class="form-group nav navbar-right panel_toolbox col-md-4">
+            <label class="control-label col-md-3 col-sm-3 col-xs-6">Product Type:</label>
+            <div class="col-md-9 col-sm-9 col-xs-6">
+                <select class="form-control" id="productType">
+                    <option value="-1">All</option>
+                    <option value="0">Raw Material</option>
+                    <option value="1">Finished Product</option>
+                  </select>
+            </div>
+          </div>
         <div class="x_content">
           <table class="table" id="products">
             <thead>
@@ -34,6 +44,7 @@
                 <th>Supplier</th>
                 <th>Warehouse</th>
                 <th>Section</th>
+                <th>Type</th>
                 <th></th>
               </tr>
             </thead>
@@ -80,11 +91,68 @@
       var _token = $('meta[name="csrf-token"]').attr('content');
       var table;
 
-      table = $("#products").DataTable({
+      table = initTable();
+
+
+      $("#btnDelete").on('click', function(){
+        var id = $("#delete_id").val();
+
+        console.log(id);
+
+        $.ajax({
+          headers: {
+            'X-CSRF-TOKEN': _token
+          },
+          type:'DELETE',
+          url:'/products/' + id,
+          success:function(data){
+              if(data.errors != undefined && data.errors.length > 0){
+                showErrorMessage(data.errors);
+              }else{
+                toastr.success('Product was deleted','Success', {timeOut: 1000});
+                $("#btnCancel").click();
+                $('#product').DataTable().destroy();
+                table = initTable();
+              }
+          },
+          error:function(error){
+              console.log(error);
+          }
+              });
+      });
+
+
+      $("#productType").change(function(){
+        $('#product').DataTable().destroy();
+        table = initTable();
+      });
+
+
+    });
+
+    function editProduct(id){
+      window.location.href = '/products/' + id + '/edit';
+    }
+
+    function showDeleteConfirmation(id){
+      $("#delete_id").val(id);
+    }
+
+    function showErrorMessage(errMessage){
+            var errMessageContent = '';
+            errMessage.forEach(element => {
+              errMessageContent = errMessageContent + element + '<br/>';
+            });
+            toastr.error(errMessageContent, 'Error', {timeOut: 3000});
+    }
+
+    function initTable(){
+      $("#products").DataTable({
         "pageLength": 30,
         "processing": true,
         "serverSide": true,
-        "ajax": "{{route('api.getProducts')}}",
+        "bDestroy": true,
+        "ajax": "api/getProducts/"+ $("#productType").val(),
         "columns":[
           {
             "width": "15%",
@@ -131,7 +199,17 @@
             "data": "section"
           },
           {
-            "width": "35%",
+            "width": "10%",
+            "data":null,
+            "orderable": false,
+            "searchable":false,
+            render: function ( data, type, row ) {
+              var pType = data.type == 1 ? 'Finished Product' : 'Raw Material';
+              return pType;
+            }
+          },
+          {
+            "width": "20%",
             "data":null,
             "orderable": false,
             "searchable":false,
@@ -143,50 +221,7 @@
         ]
       });
 
-
-      $("#btnDelete").on('click', function(){
-        var id = $("#delete_id").val();
-
-        console.log(id);
-
-        $.ajax({
-          headers: {
-            'X-CSRF-TOKEN': _token
-          },
-          type:'DELETE',
-          url:'/products/' + id,
-          success:function(data){
-              if(data.errors != undefined && data.errors.length > 0){
-                showErrorMessage(data.errors);
-              }else{
-                toastr.success('Product was deleted','Success', {timeOut: 1000});
-                $("#btnCancel").click();
-                table.ajax.reload();
-              }
-          },
-          error:function(error){
-              console.log(error);
-          }
-              });
-      });
-
-
-    });
-
-    function editProduct(id){
-      window.location.href = '/products/' + id + '/edit';
-    }
-
-    function showDeleteConfirmation(id){
-      $("#delete_id").val(id);
-    }
-
-    function showErrorMessage(errMessage){
-            var errMessageContent = '';
-            errMessage.forEach(element => {
-              errMessageContent = errMessageContent + element + '<br/>';
-            });
-            toastr.error(errMessageContent, 'Error', {timeOut: 3000});
+      return $("#products").dataTable();
     }
   </script>
 @endsection
