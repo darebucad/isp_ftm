@@ -40,6 +40,7 @@ Route::get('/api/getSections', 'APIController@getSections')->name('api.getSectio
 Route::get('/api/getProducts/{type}', 'APIController@getProducts')->name('api.getProducts');
 Route::get('/api/getBrands', 'APIController@getBrands')->name('api.getBrands');
 Route::get('/api/getStores', 'APIController@getStores')->name('api.getStores');
+Route::get('/api/getUOM', 'APIController@getUOM')->name('api.getUOM');
 Route::get('/api/searchCategories', 'APIController@searchCategories')->name('api.searchCategories');
 Route::get('/api/searchSuppliers', 'APIController@searchSuppliers')->name('api.searchSuppliers');
 Route::get('/api/searchWarehouse', 'APIController@searchWarehouse')->name('api.searchWarehouse');
@@ -83,3 +84,6 @@ Route::resource('purchases', 'PurchaseController');
 
 //Store
 Route::resource('stores', 'StoreController');
+
+//Unit of Measure
+Route::resource('uom', 'UnitOfMeasureController');

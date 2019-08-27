@@ -12,6 +12,7 @@ use App\Sections;
 use App\Product;
 use App\Brand;
 use App\Store;
+use App\UnitOfMeasure;
 
 class APIController extends Controller
 {
@@ -52,6 +53,12 @@ class APIController extends Controller
     // Get the stores
     public function getStores(){
       $query = Store::select('Id','Name','Address');
+      return datatables($query)->make(true);
+    }
+
+    //Get Unit of Measure
+    public function getUOM(){
+      $query = UnitOfMeasure::select('Id','Name');
       return datatables($query)->make(true);
     }
 
