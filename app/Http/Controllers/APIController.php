@@ -13,6 +13,7 @@ use App\Product;
 use App\Brand;
 use App\Store;
 use App\UnitOfMeasure;
+use App\PurchaseStatus;
 
 class APIController extends Controller
 {
@@ -180,6 +181,22 @@ class APIController extends Controller
 
       $response = array(
         'items' => $brands
+      );
+
+      return response()->json($response);
+    }
+
+    // Search list of status
+    public function searchPurchaseStatus(Request $request){
+      $term = $request->q;
+
+      $status = PurchaseStatus::where('name', 'LIKE', '%' . $term . '%')
+      ->select('id', 'name AS text')
+      ->orderBy('name', 'ASC')
+      ->get();
+
+      $response = array(
+        'items'  =>  $status
       );
 
       return response()->json($response);

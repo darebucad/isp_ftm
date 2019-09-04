@@ -15,9 +15,13 @@ class CreatePurchasesTable extends Migration
     {
         Schema::create('purchases', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('status')->nullable();
             $table->timestamp('order_date')->nullable();
-            $table->timestamp('delivery_date')->nullable();
+            $table->timestamp('receipt_date')->nullable();
+            $table->string('description')->nullable();
+            $table->unsignedBigInteger('supplier_id');
+            $table->foreign('supplier_id')->references('id')->on('suppliers');
+            $table->unsignedBigInteger('status_id');
+            $table->foreign('status_id')->references('id')->on('purchase_status');
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();

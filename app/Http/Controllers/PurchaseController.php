@@ -3,6 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
+use App\Purchase;
+use App\PurchaseDetails;
+use Validator;
+use Carbon\Carbon;
 
 class PurchaseController extends Controller
 {
@@ -34,7 +40,47 @@ class PurchaseController extends Controller
      */
     public function store(Request $request)
     {
-        //
+      $messages = [
+        'order_date.required' => 'Please enter an order date',
+        'supplier.required' => 'Please select a supplier',
+      ];
+
+      $validator = Validator::make($request->all(),
+          [
+              'order_date' => 'required',
+              'supplier_id' => 'required',
+          ], $messages
+      );
+
+      if ($validator->fails()) {
+        return response()->json(['errors'=>$validator->errors()->all()]);
+      } else {
+        $purchase = new Purchase();
+        $purchase->order_date = date("Y-m-d h:m:s", strtotime($request->order_date));
+        $purchase->description = $request->description;
+        $purchase->supplier_id = $request->supplier_id;
+        $purchase->status_id = '1';
+        $purchase->created_at = Carbon::now('Asia/Manila')->toDateTimeString();
+        $purchase->user_id = Auth::id();
+        $purchase->save();
+
+        foreach ($request->items as $value) {
+          $details = New PurchaseDetails();
+          $details->quantity = $value['qty'];
+          $details->price = $value['unit_price'];
+          $details->purchase_id = $purchase->id;
+          $details->product_id = $value['product_id'];
+          $details->created_at = Carbon::now('Asia/Manila')->toDateTimeString();
+          $details->save();
+        }
+      }
+
+      $response = array(
+        'success' => 'New purchase was successfully added',
+        'errors' => []
+      );
+
+      return response()->json($response);
     }
 
     /**
@@ -45,7 +91,7 @@ class PurchaseController extends Controller
      */
     public function show($id)
     {
-        //
+
     }
 
     /**

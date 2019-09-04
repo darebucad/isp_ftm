@@ -19,7 +19,6 @@
           <form id="products" data-parsley-validate="" class="form-horizontal form-label-left" novalidate="">
             @csrf
 
-
             <div class="form-group">
               <label class="col-md-4 col-sm-3 col-xs-12" for="order_date">Order Date<span class="required">*</span></label>
               <label class="col-md-5 col-sm-3 col-xs-12" for="supplier">Supplier<span class="required">*</span></label>
@@ -32,7 +31,7 @@
                   <div class="control-group">
                     <div class="controls">
                       <div class="col-md-11 xdisplay_inputx form-group has-feedback">
-                        <input type="text" class="form-control has-feedback-left" id="single_cal3" placeholder="First Name" aria-describedby="inputSuccess2Status3">
+                        <input type="text" class="form-control has-feedback-left" id="single_cal3" placeholder="Select a Date" aria-describedby="inputSuccess2Status3">
                         <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
                         <span id="inputSuccess2Status3" class="sr-only">(success)</span>
                       </div>
@@ -50,26 +49,36 @@
               <div class="col-md-2 col-sm-10 col-xs-12">
                 <select name="status" id="status" class="col-md-12 col-xs-12">
                   <option value=""></option>
-                  <option value="N" selected>New</option>
-                  <option value="R">Received</option>
-                  <option value="C">Change Order</option>
-                  <option value="X">Cancelled</option>
-                  <option value="D">Done</option>
                 </select>
               </div>
             </div>
 
+            <div class="form-group">
+              <label class="col-md-4 col-sm-3 col-xs-12" for="description">Description</label>
+            </div>
+
+            <div class="form-group row">
+              <div class="col-md-12 col-sm-10 col-xs-12">
+                <textarea name="description" rows="3" cols="80" id="description" class="form-control"></textarea>
+              </div>
+            </div>
+
             <div class="ln_solid"></div>
+            <div class="form-group row">
+              <div class="col-md-12">
+                <button type="button" name="btn_update" id="btn_update" class="btn btn-danger" onclick="addRow()">Update</button>
+              </div>
+            </div>
 
             <div class="row">
               <div class="col-md-12">
                 <table class="table table-striped" id="orders">
                   <thead>
                     <tr>
-                      <th>ID</th>
                       <th>Raw Material</th>
                       <th>Quantity</th>
                       <th>Price</th>
+                      <th>Action</th>
                     </tr>
                   </thead>
                 </table>
@@ -80,7 +89,7 @@
 
             <div class="form-group">
               <div class="col-md-12 col-sm-6 col-xs-12 col-md-offset-5">
-                <input type="button" class="btn btn-primary" value="Cancel" onclick="window.location.href='/products'" />
+                <input type="button" class="btn btn-primary" value="Cancel" onclick="window.location.href='/purchases'" />
                 <button type="button" class="btn btn-success" id="btnSubmit">Submit</button>
               </div>
             </div>
@@ -161,11 +170,33 @@
       $('#status').select2({
         placeholder: "Select a status",
         allowClear: true,
-      });
+        ajax: {
+          url: '/api/searchPurchaseStatus', //'https://api.github.com/search/repositories',
+          dataType: 'JSON',
+          delay: 200,
+          data: function (params){
+            return {
+              q: params.term,
+              page: params.page
+            };
+          },
+          processResults: function(data, params){
+            params.page = params.page || 1;
+
+            return {
+              results: data.items,
+              pagination: {
+                more: (params.page = 10) < data.total
+              }
+            };
+          },
+          cache: true
+        },
+
+      }).val('1').trigger('change');
+
 
       $('#supplier').on('select2:select', function(e){
-        console.log(e.params.data.id);
-
         $.ajax({
           headers: {
             'X-CSRF-TOKEN': _token
@@ -173,18 +204,27 @@
           url: "/api/populateProducts/" + e.params.data.id,
           dataType: "JSON",
           success: function(data){
-            console.log(data);
-            $('#orders tr').not(':first').not(':last').remove();
+            // $('#orders tr').not(':first').not(':last').remove();
             var html = '';
             for (var i = 0; i < data.length; i++) {
-              html += '<tr>' +
-                '<td>' + data[i].id + '</td>' +
-                '<td>' + data[i].name + '</td>' +
-                '<td>' + '1.00' + '</td>' +
-                '<td>' + data[i].unit_price + '</td>' +
+              html += '<tr id='+ data[i].id +' class="items">' +
+                '<td class="name">' + data[i].name + '</td>' +
+                '<td class="qty">' + '1.00' + '</td>' +
+                '<td class="unit_price">' + data[i].unit_price + '</td>' +
+                '<td><button class="delete">Delete</button></td>' +
                 '</tr>';
             }
-            $('#orders tr').first().after(html);
+
+            html += '<tr>' +
+              '<td><a href="#" class="add">Add new item</a></td>' +
+              '<td>' + '' + '</td>' +
+              '<td>' + '' + '</td>' +
+              '<td>' + '' + '</td>' +
+              '<td>' + '' + '</td>' +
+              '</tr>';
+
+            // $('#orders tr').first().after(html);
+            $('#orders').prepend(html)
           },
           error: function(data){
 
@@ -228,45 +268,60 @@
         return /^-?\d*[.,]?\d*$/.test(value);
       });
 
+      $('#orders').on('click', '.add', function(e){
+        e.preventDefault();
+          html = '<tr class="items">' +
+            '<td class="name">' + '1' + '</td>' +
+            '<td class="qty">' + '' + '</td>' +
+            '<td class="unit_price">' + '' + '</td>' +
+            '<td><button class="delete">Delete</button></td>' +
+            '</tr>';
+          $('#orders').prepend(html);
+      });
 
-      $('#btnSubmit').on('click', function(){
-          // var _token = CSRF_TOKEN;
-          var name = $('#product').val();
-          var category_id = $('#category').val();
-          var description  = $('#description').val();
-          var content = $('#content').val();
-          var net_weight = $('#net_weight').val();
-          var stock_on_hand = $('#stock_on_hand').val();
-          var purchase_price = $('#purchase_price').val();
-          var unit_price = $('#unit_price').val();
+      $('#orders').on('click', '.delete', function(e){
+        e.preventDefault();
+        $(this).closest('tr').remove();
+      });
+
+      $('#btnSubmit').on('click', function(e){
+        e.preventDefault();
+          var order_date = $('#single_cal3').val();
           var supplier_id = $('#supplier').val();
-          var warehouse_id = $('#warehouse').val();
-          var section_id = $('#section').val();
-          var brand_id = $('#brand').val();
-          var type = $('#type').val();
-
+          var status_id = $('#status').val();
+          var description = $('#description').val();
           var data= {};
+          var items = [];
 
-          // data.id = 0;
-          data.name = name;
-          data.category_id = category_id;
-          data.description = description;
-          data.content = content;
-          data.net_weight = net_weight;
-          data.stock_on_hand = stock_on_hand;
-          data.purchase_price = purchase_price;
-          data.unit_price = unit_price;
+          // Items
+          $('#orders .items').each(function(){
+            var row = $(this);
+            var product_id = row.attr('id');
+            var name = row.find('.name').text();
+            var qty = row.find('.qty').text();
+            var unit_price = row.find('.unit_price').text();
+            var obj = {};
+
+            obj.product_id = product_id;
+            obj.name = name;
+            obj.qty = qty;
+            obj.unit_price = unit_price;
+
+            items.push(obj);
+          });
+
+          // Data
+          data.order_date = order_date;
           data.supplier_id = supplier_id;
-          data.warehouse_id = warehouse_id;
-          data.section_id = section_id;
-          data.brand_id = brand_id;
-          data.type = type;
+          data.status_id = status_id;
+          data.description = description;
+          data.items = items;
 
         $.ajax({
           headers: {
             'X-CSRF-TOKEN': _token
           },
-          url: '/products',
+          url: '/purchases',
           type: "POST",
           data: data,
           dataType: 'JSON',
@@ -275,9 +330,9 @@
               showErrorMessage(data.errors);
 
             } else {
-              toastr.success('New product was created', 'Success', {timeout: 1000});
+              toastr.success(data.success, 'Success', {timeout: 1000});
               window.setTimeout(function(){
-                window.location.href = '/products';
+                window.location.href = '/purchases';
               }, 1000);
             }
           },
