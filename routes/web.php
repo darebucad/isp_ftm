@@ -48,6 +48,7 @@ Route::get('/api/searchSections', 'APIController@searchSections')->name('api.sea
 Route::get('/api/searchBrands', 'APIController@searchBrands');
 Route::get('/api/populateProducts/{id}', 'APIController@populateProducts');
 Route::get('/api/searchPurchaseStatus', 'APIController@searchPurchaseStatus');
+Route::get('/api/searchProducts', 'APIController@searchProducts');
 
 
 // Suppliers

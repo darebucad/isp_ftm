@@ -202,6 +202,22 @@ class APIController extends Controller
       return response()->json($response);
     }
 
+    // Search list of products
+    public function searchProducts(Request $request){
+      $term = $request->q;
+
+      $products = Product::where('name', 'LIKE', '%' . $term . '%')
+      ->select('id', 'name AS text')
+      ->orderBy('name', 'ASC')
+      ->get();
+
+      $response = array(
+        'items' => $products
+      );
+
+      return response()->json($response);
+    }
+
 
     // Populate list of products
     public function populateProducts($id){

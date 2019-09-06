@@ -5,8 +5,7 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
   <!-- Select2 4.0.8 -->
   <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
-
-@endsection()
+@endsection
 
 @section('content')
 <div class="col-md-12 col-sm-12 col-xs-12">
@@ -72,7 +71,7 @@
 
             <div class="row">
               <div class="col-md-12">
-                <table class="table table-striped" id="orders">
+                <table class="table table-striped" id="orders" style="width: 100%;">
                   <thead>
                     <tr>
                       <th>Raw Material</th>
@@ -97,7 +96,7 @@
         </div>
       </div>
   </div>
-@endsection()
+@endsection
 
 @section('js')
   <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
@@ -105,11 +104,20 @@
   <script src="{{ asset('js/select2.min.js') }}"></script>
   <!-- jquery.inputmask -->
   <script src="{{ asset('js/jquery.inputmask.bundle.min.js') }}"></script>
-
+  <!-- SimpleTableCellEditor -->
+  <script src="{{ asset('plugins/edit-table/SimpleTableCellEditor.js') }}"></script>
+  <!-- Custom JS -->
   <script>
-
     $(document).ready(function(){
       var _token = $('meta[name="csrf-token"]').attr('content');
+      var editor = new SimpleTableCellEditor("orders");
+
+      editor.SetEditableClass("editMe");
+      editor.SetEditableClass("feedMeNumbers", { validation: $.isNumeric }); //If validation return false, value is not updated
+
+      $('#orders').on("cell:edited", function (event) {
+        // console.log(`Cell edited : ${event.oldValue} => ${event.newValue}`);
+      });
 
       $('#category').select2({
         placeholder: "Select a category",
@@ -136,7 +144,6 @@
           },
           cache: true
         },
-
       });
 
       $('#supplier').select2({
@@ -164,7 +171,6 @@
           },
           cache: true
         },
-
       });
 
       $('#status').select2({
@@ -192,9 +198,7 @@
           },
           cache: true
         },
-
-      }).val('1').trigger('change');
-
+      });
 
       $('#supplier').on('select2:select', function(e){
         $.ajax({
@@ -205,12 +209,13 @@
           dataType: "JSON",
           success: function(data){
             // $('#orders tr').not(':first').not(':last').remove();
+            $('#orders tbody').empty();
             var html = '';
             for (var i = 0; i < data.length; i++) {
               html += '<tr id='+ data[i].id +' class="items">' +
-                '<td class="name">' + data[i].name + '</td>' +
-                '<td class="qty">' + '1.00' + '</td>' +
-                '<td class="unit_price">' + data[i].unit_price + '</td>' +
+                '<td>' + data[i].name + '</td>' +
+                '<td class="qty feedMeNumbers">' + '1.00' + '</td>' +
+                '<td class="unit_price feedMeNumbers">' + data[i].unit_price + '</td>' +
                 '<td><button class="delete">Delete</button></td>' +
                 '</tr>';
             }
@@ -220,9 +225,7 @@
               '<td>' + '' + '</td>' +
               '<td>' + '' + '</td>' +
               '<td>' + '' + '</td>' +
-              '<td>' + '' + '</td>' +
               '</tr>';
-
             // $('#orders tr').first().after(html);
             $('#orders').prepend(html)
           },
@@ -270,13 +273,46 @@
 
       $('#orders').on('click', '.add', function(e){
         e.preventDefault();
-          html = '<tr class="items">' +
-            '<td class="name">' + '1' + '</td>' +
-            '<td class="qty">' + '' + '</td>' +
-            '<td class="unit_price">' + '' + '</td>' +
+          html = '<tr id="" class="items">' +
+            '<td>' + '<select class="product col-md-12"><option value=""></option></select>' + '</td>' +
+            '<td class="qty feedMeNumbers">' + '1.00' + '</td>' +
+            '<td class="unit_price feedMeNumbers">' + '1.00' + '</td>' +
             '<td><button class="delete">Delete</button></td>' +
             '</tr>';
           $('#orders').prepend(html);
+
+          $('.product').select2({
+            placeholder: "Please select a product",
+            allowClear: true,
+            ajax: {
+              url: '/api/searchProducts', //'https://api.github.com/search/repositories',
+              dataType: 'JSON',
+              delay: 200,
+              data: function (params){
+                return {
+                  q: params.term,
+                  page: params.page
+                };
+              },
+              processResults: function(data, params){
+                params.page = params.page || 1;
+
+                return {
+                  results: data.items,
+                  pagination: {
+                    more: (params.page = 10) < data.total
+                  }
+                };
+              },
+              cache: true
+            },
+          });
+      });
+
+      $('#orders').on('select2:select', '.product', function(e){
+        console.log(e.params.data.id);
+
+        $(this).closest('tr').attr('id', e.params.data.id);
       });
 
       $('#orders').on('click', '.delete', function(e){
@@ -317,6 +353,8 @@
           data.description = description;
           data.items = items;
 
+          // console.log(data);
+
         $.ajax({
           headers: {
             'X-CSRF-TOKEN': _token
@@ -352,4 +390,4 @@
 
     });
   </script>
-@endsection()
+@endsection
