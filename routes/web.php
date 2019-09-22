@@ -49,6 +49,7 @@ Route::get('/api/searchBrands', 'APIController@searchBrands');
 Route::get('/api/populateProducts/{id}', 'APIController@populateProducts');
 Route::get('/api/searchPurchaseStatus', 'APIController@searchPurchaseStatus');
 Route::get('/api/searchProducts', 'APIController@searchProducts');
+Route::get('/api/getPurchaseOrders', 'APIController@getPurchaseOrders');
 
 
 // Suppliers
@@ -89,3 +90,6 @@ Route::resource('stores', 'StoreController');
 
 //Unit of Measure
 Route::resource('uom', 'UnitOfMeasureController');
+
+// Print
+Route::get('/print/purchase_order/{id}', 'PrintController@printPurchaseOrder');

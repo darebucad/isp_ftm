@@ -75,9 +75,9 @@
                     </ul>
                   </li>
 
-                  <li><a><i class="fa fa-edit"></i> Purchase Orders <span class="fa fa-chevron-down"></span></a>
+                  <li><a><i class="fa fa-edit"></i> Purchases <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href="/purchases">Purchases</a></li>
+                      <li><a href="/purchases">Purchase Orders</a></li>
                       <li><a href="#">Orders</a></li>
                     </ul>
                   </li>

@@ -17,6 +17,18 @@ use App\PurchaseStatus;
 
 class APIController extends Controller
 {
+
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+
     // Get the product categories
     public function getCategories(){
         $query = Categories::select('Id','Name','Description');
@@ -102,6 +114,16 @@ class APIController extends Controller
       }
 
        return datatables($query)->make(true);
+    }
+
+    // Get list of purchase orders
+    public function getPurchaseOrders(){
+      $query = DB::table('purchases AS p')
+      ->leftjoin('suppliers AS s', 's.id', '=', 'p.supplier_id')
+      ->leftjoin('purchase_status AS ps', 'ps.id', '=', 'p.status_id')
+      ->select('p.id', DB::raw('lpad(p.po_no, 6, "0") as po_no'), 'p.order_date', 's.name', 'p.description', 'p.receipt_date', 'ps.name AS status', 'p.created_at');
+
+      return datatables($query)->make(true);
     }
 
 

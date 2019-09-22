@@ -15,6 +15,7 @@ class CreatePurchasesTable extends Migration
     {
         Schema::create('purchases', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->integer('po_no', 6);
             $table->timestamp('order_date')->nullable();
             $table->timestamp('receipt_date')->nullable();
             $table->string('description')->nullable();

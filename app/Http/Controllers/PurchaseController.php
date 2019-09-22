@@ -4,14 +4,29 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 use App\Purchase;
 use App\PurchaseDetails;
+use App\Supplier;
+use App\PurchaseStatus;
 use Validator;
 use Carbon\Carbon;
 
 class PurchaseController extends Controller
 {
+
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+
     /**
      * Display a listing of the resource.
      *
@@ -29,7 +44,8 @@ class PurchaseController extends Controller
      */
     public function create()
     {
-        return view('purchases.create');
+        $purchase = Purchase::select('po_no')->orderBy('created_at', 'desc')->first();
+        return view('purchases.create')->with('po_no', $purchase->po_no);
     }
 
     /**
@@ -60,6 +76,7 @@ class PurchaseController extends Controller
         $purchase->description = $request->description;
         $purchase->supplier_id = $request->supplier_id;
         $purchase->status_id = '1';
+        $purchase->po_no = $request->po_no;
         $purchase->created_at = Carbon::now('Asia/Manila')->toDateTimeString();
         $purchase->user_id = Auth::id();
         $purchase->save();
@@ -76,8 +93,9 @@ class PurchaseController extends Controller
       }
 
       $response = array(
-        'success' => 'New purchase was successfully added',
-        'errors' => []
+        'success' => 'New purchase order was successfully added',
+        'errors' => [],
+        'id' => $purchase->id
       );
 
       return response()->json($response);
@@ -94,6 +112,7 @@ class PurchaseController extends Controller
 
     }
 
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -102,7 +121,17 @@ class PurchaseController extends Controller
      */
     public function edit($id)
     {
-        //
+        $purchase = Purchase::findOrFail($id);
+        $details = DB::table('purchases AS p')
+          ->leftjoin('purchase_details AS pd', 'pd.purchase_id', '=', 'p.id')
+          ->leftjoin('products AS pr', 'pr.id', '=', 'pd.product_id')
+          ->select('pr.id', 'pr.name', 'pd.quantity', 'pd.price')
+          ->where('p.id', $id)
+          ->get();
+        $suppliers = Supplier::all();
+        $status = PurchaseStatus::all();
+
+        return view('purchases.edit', ['purchase' => $purchase, 'details' => $details, 'suppliers' => $suppliers, 'status' => $status]);
     }
 
     /**
@@ -114,7 +143,47 @@ class PurchaseController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $messages = [
+          'order_date.required' => 'Please enter an order date',
+          'supplier.required' => 'Please select a supplier',
+        ];
+
+        $validator = Validator::make($request->all(),
+            [
+                'order_date' => 'required',
+                'supplier_id' => 'required',
+            ], $messages
+        );
+
+        if ($validator->fails()) {
+          return response()->json(['errors'=>$validator->errors()->all()]);
+        } else {
+          $purchase = Purchase::findOrFail($id);
+          $purchase->order_date = date("Y-m-d h:m:s", strtotime($request->order_date));
+          $purchase->description = $request->description;
+          $purchase->supplier_id = $request->supplier_id;
+          $purchase->status_id = '2';
+          $purchase->updated_at = Carbon::now('Asia/Manila')->toDateTimeString();
+          $purchase->user_id = Auth::id();
+          $purchase->save();
+
+          foreach ($request->items as $value) {
+            $details = New PurchaseDetails();
+            $details->quantity = $value['qty'];
+            $details->price = $value['unit_price'];
+            $details->purchase_id = $purchase->id;
+            $details->product_id = $value['product_id'];
+            $details->created_at = Carbon::now('Asia/Manila')->toDateTimeString();
+            $details->save();
+          }
+        }
+
+        $response = array(
+          'success' => 'New purchase order was successfully added',
+          'errors' => []
+        );
+
+        return response()->json($response);
     }
 
     /**
