@@ -13,6 +13,7 @@ use App\Supplier;
 use App\Warehouse;
 use App\Sections;
 use App\Brand;
+use App\UnitOfMeasure;
 
 use Carbon\Carbon;
 
@@ -90,6 +91,8 @@ class ProductController extends Controller
           $product->created_at = $current_time->toDateTimeString();
           $product->user_id = $user_id;
           $product->type = $request->input('type');
+          $product->actual_on_hand = $request->input('actual_on_hand');
+          $product->unitofmeasure_id = $request->input('unitofmeasure_id');
           // dd($product);
           $product->save();
 
@@ -128,8 +131,11 @@ class ProductController extends Controller
         $warehouses = Warehouse::all();
         $sections = Sections::all();
         $brands = Brand::all();
+        $unitofmeasures = UnitOfMeasure::all();
 
-        return view('products.edit', ['product' => $product, 'categories' => $categories, 'suppliers' => $suppliers, 'warehouses' => $warehouses, 'sections' => $sections, 'brands' => $brands]);
+        return view('products.edit', ['product' => $product, 'categories' => $categories,
+        'suppliers' => $suppliers, 'warehouses' => $warehouses, 'sections' => $sections,
+        'brands' => $brands, 'unitofmeasures' => $unitofmeasures]);
     }
 
     /**
@@ -182,6 +188,8 @@ class ProductController extends Controller
           $product->created_at = $current_time->toDateTimeString();
           $product->user_id = $user_id;
           $product->type = $request->input('type');
+          $product->actual_on_hand = $request->input('actual_on_hand');
+          $product->unitofmeasure_id = $request->input('unitofmeasure_id');
           // dd($product);
           $product->save();
 

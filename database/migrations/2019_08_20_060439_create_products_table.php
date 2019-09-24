@@ -20,6 +20,7 @@ class CreateProductsTable extends Migration
           $table->double('content', 8, 2);
           $table->double('net_weight', 8, 2)->nullable();
           $table->double('stock_on_hand', 8, 2)->nullable();
+          $table->double('actual_on_hand', 8, 2)->nullable();
           $table->double('purchase_price', 8, 2)->nullable();
           $table->double('unit_price', 8, 2);
           $table->string('type', 1);
@@ -35,6 +36,8 @@ class CreateProductsTable extends Migration
           $table->foreign('user_id')->references('id')->on('users');
           $table->unsignedBigInteger('brand_id')->nullable();
           $table->foreign('brand_id')->references('id')->on('brand');
+          $table->unsignedBigInteger('unitofmeasure_id')->nullable();
+          $table->foreign('unitofmeasure_id')->references('id')->on('unitofmeasure');
           $table->timestamps();
         });
     }

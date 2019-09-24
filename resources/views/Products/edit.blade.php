@@ -24,6 +24,7 @@
             <input type="hidden" name="section_id" value="{{ $product->section_id }}" id="section_id">
             <input type="hidden" name="brand_id" value="{{ $product->brand_id }}" id="brand_id">
             <input type="hidden" name="type_id" value="{{ $product->type }}" id="type_id">
+            <input type="hidden" name="unitofmeasure_id" value="{{ $product->unitofmeasure_id }}" id="unitofmeasure_id">
 
             <div class="form-group">
               <label class="col-md-3 col-sm-3 col-xs-12" for="product">Name<span class="required">*</span></label>
@@ -74,6 +75,7 @@
               <label class="col-md-3 col-sm-3 col-xs-12" for="content">Content<span class="required">*</span></label>
               <label class="col-md-3 col-sm-3 col-xs-12" for="net_weight">Net Weight</label>
               <label class="col-md-3 col-sm-3 col-xs-12" for="stock_on_hand">Stock on Hand</label>
+              <label class="col-md-3 col-sm-3 col-xs-12" for="actual_on_hand">Actual on Hand</label>
             </div>
 
             <div class="form-group">
@@ -85,12 +87,17 @@
                 <input type="text" name="net_weight" id="net_weight" value="{{ $product->net_weight }}" class="form-control col-md-7 col-xs-12">
               </div>
 
-              <div class="col-md-4 col-sm-4 col-xs-12">
+              <div class="col-md-3 col-sm-3 col-xs-12">
                 <input type="text" name="stock_on_hand" id="stock_on_hand" value="{{ $product->stock_on_hand }}" class="form-control col-md-7 col-xs-12">
+              </div>
+
+              <div class="col-md-3 col-sm-3 col-xs-12">
+                <input type="text" name="actual_on_hand" id="actual_on_hand" value="{{ $product->actual_on_hand }}" class="form-control col-md-7 col-xs-12">
               </div>
             </div>
 
             <div class="form-group">
+              <label class="col-md-3 col-sm-3 col-xs-12" for="unitofmeasure">Unit of measurement</label>
               <label class="col-md-3 col-sm-3 col-xs-12" for="type">Type<span class="required">*</span></label>
               <label class="col-md-3 col-sm-3 col-xs-12" for="unit_price">Unit Price<span class="required">*</span></label>
               <label class="col-md-3 col-sm-3 col-xs-12" for="Purchase Price">Purchase Price</label>
@@ -98,6 +105,15 @@
             </div>
 
             <div class="form-group">
+              <div class="col-md-3 col-sm-3 col-xs-12">
+                <select name="unitofmeasure" id="unitofmeasure" class="col-md-12 col-xs-12">
+                  <option value=""></option>
+                  @foreach($unitofmeasures as $unitofmeasure)
+                  <option value="{{ $unitofmeasure->id }}">{{ $unitofmeasure->name }}</option>
+                  @endforeach
+                </select>
+              </div>
+
               <div class="col-md-3 col-sm-3 col-xs-12 form-group has-feedback">
                 <select name="type" id="type" class="col-md-12 col-xs-12">
                   <option value=""></option>
@@ -182,6 +198,7 @@
       var section_id = $('#section_id').val();
       var brand_id = $('#brand_id').val();
       var type_id = $('#type_id').val();
+      var unitofmeasure_id = $('#unitofmeasure_id').val();
 
       // Category
       $('#category').select2({
@@ -230,6 +247,13 @@
       }).val(type_id);
       $('#type').trigger('change');
 
+      // Unitofmeasure
+      $('#unitofmeasure').select2({
+        placeholder: 'Select a unit',
+        allowClear: true
+      }).val(unitofmeasure_id);
+      $('#unitofmeasure').trigger('change');
+
 
       $('#btnSubmit').on('click', function(){
           var product_id = $('#product_id').val();
@@ -246,6 +270,8 @@
           var section_id = $('#section').val();
           var brand_id = $('#brand').val();
           var type = $('#type').val();
+          var actual_on_hand = $('#actual_on_hand').val();
+          var unitofmeasure_id = $('#unitofmeasure').val();
 
           var data= {};
 
@@ -263,6 +289,8 @@
           data.section_id = section_id;
           data.brand_id = brand_id;
           data.type = type;
+          data.actual_on_hand = actual_on_hand;
+          data.unitofmeasure_id = unitofmeasure_id;
 
         $.ajax({
           headers: {

@@ -50,6 +50,7 @@ Route::get('/api/populateProducts/{id}', 'APIController@populateProducts');
 Route::get('/api/searchPurchaseStatus', 'APIController@searchPurchaseStatus');
 Route::get('/api/searchProducts', 'APIController@searchProducts');
 Route::get('/api/getPurchaseOrders', 'APIController@getPurchaseOrders');
+Route::get('/api/searchUnitOfMeasure', 'APIController@searchUnitOfMeasure');
 
 
 // Suppliers

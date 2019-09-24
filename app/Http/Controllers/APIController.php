@@ -86,7 +86,7 @@ class APIController extends Controller
       ->leftjoin('users AS u', 'u.id', '=', 'p.user_id')
       ->leftjoin('brand AS b', 'b.id', '=', 'p.brand_id')
       ->select('p.id', 'p.name', 'p.description', 'b.name AS brand','p.content', 'p.net_weight', 'p.stock_on_hand', 'p.purchase_price', 'p.unit_price',
-     'c.name AS category', 's.name AS supplier', 'w.name AS warehouse', 'se.name AS section', 'u.name AS user', 'p.created_at', 'p.updated_at', 'p.type');
+     'c.name AS category', 's.name AS supplier', 'w.name AS warehouse', 'se.name AS section', 'u.name AS user', 'p.created_at', 'p.updated_at', 'p.type', 'p.actual_on_hand');
 
 
       if($type === "0" || $type === 0){
@@ -99,7 +99,7 @@ class APIController extends Controller
         ->leftjoin('brand AS b', 'b.id', '=', 'p.brand_id')
         ->where('p.type', 0)
         ->select('p.id', 'p.name', 'p.description', 'b.name AS brand','p.content', 'p.net_weight', 'p.stock_on_hand', 'p.purchase_price', 'p.unit_price',
-       'c.name AS category', 's.name AS supplier', 'w.name AS warehouse', 'se.name AS section', 'u.name AS user', 'p.created_at', 'p.updated_at', 'p.type');
+       'c.name AS category', 's.name AS supplier', 'w.name AS warehouse', 'se.name AS section', 'u.name AS user', 'p.created_at', 'p.updated_at', 'p.type', 'p.actual_on_hand');
       }else if ($type === "1" || $type === 1){
         $query = DB::table('products AS p')
         ->leftjoin('categories AS c', 'c.id', '=', 'p.category_id')
@@ -110,7 +110,7 @@ class APIController extends Controller
         ->leftjoin('brand AS b', 'b.id', '=', 'p.brand_id')
         ->where('p.type', 1)
         ->select('p.id', 'p.name', 'p.description', 'b.name AS brand','p.content', 'p.net_weight', 'p.stock_on_hand', 'p.purchase_price', 'p.unit_price',
-       'c.name AS category', 's.name AS supplier', 'w.name AS warehouse', 'se.name AS section', 'u.name AS user', 'p.created_at', 'p.updated_at', 'p.type');
+       'c.name AS category', 's.name AS supplier', 'w.name AS warehouse', 'se.name AS section', 'u.name AS user', 'p.created_at', 'p.updated_at', 'p.type', 'p.actual_on_hand');
       }
 
        return datatables($query)->make(true);
@@ -246,5 +246,19 @@ class APIController extends Controller
       $products = Product::where('supplier_id', $id)->where('type', '0')->get();
 
       return response()->json($products);
+    }
+
+    // Search list of unit of measurements
+    public function searchUnitOfMeasure(Request $request){
+      $unitofmeasures = UnitOfMeasure::where('name', 'LIKE', '%' . $request->q . '%')
+      ->select('id', 'name AS text')
+      ->orderBy('name', 'ASC')
+      ->get();
+
+      $response = array(
+        'items' => $unitofmeasures
+      );
+
+      return response()->json($response);
     }
 }

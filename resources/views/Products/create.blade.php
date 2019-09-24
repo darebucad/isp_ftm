@@ -62,6 +62,7 @@
               <label class="col-md-3 col-sm-3 col-xs-12" for="content">Content<span class="required">*</span></label>
               <label class="col-md-3 col-sm-3 col-xs-12" for="net_weight">Net Weight</label>
               <label class="col-md-3 col-sm-3 col-xs-12" for="stock_on_hand">Stock on Hand</label>
+              <label class="col-md-3 col-sm-3 col-xs-12" for="actual_on_hand">Actual on Hand</label>
             </div>
 
             <div class="form-group">
@@ -73,14 +74,19 @@
                 <input type="text" name="net_weight" id="net_weight" class="form-control col-md-7 col-xs-12">
               </div>
 
-              <div class="col-md-4 col-sm-4 col-xs-12">
+              <div class="col-md-3 col-sm-3 col-xs-12">
                 <input type="text" name="stock_on_hand" id="stock_on_hand" class="form-control col-md-7 col-xs-12">
+              </div>
+
+              <div class="col-md-3 col-sm-3 col-xs-12">
+                <input type="text" name="actual_on_hand" id="actual_on_hand" class="form-control col-md-7 col-xs-12">
               </div>
             </div>
 
 
 
             <div class="form-group">
+              <label class="col-md-3 col-sm-3 col-xs-12" for="unitofmeasure">Unit of measurement</label>
               <label class="col-md-3 col-sm-3 col-xs-12" for="type">Type<span class="required">*</span></label>
               <label class="col-md-3 col-sm-3 col-xs-12" for="unit_price">Unit Price<span class="required">*</span></label>
               <label class="col-md-3 col-sm-3 col-xs-12" for="Purchase Price">Purchase Price</label>
@@ -88,6 +94,12 @@
             </div>
 
             <div class="form-group">
+              <div class="col-md-3 col-sm-3 col-xs-12">
+                <select name="unitofmeasure" id="unitofmeasure" class="col-md-12 col-xs-12">
+                  <option value=""></option>
+                </select>
+              </div>
+
               <div class="col-md-3 col-sm-3 col-xs-12 form-group has-feedback">
                 <select name="type" id="type" class="col-md-12 col-xs-12">
                   <option value=""></option>
@@ -298,12 +310,38 @@
           },
           cache: true
         },
-
       });
 
       $('#type').select2({
         placeholder: "Select a type",
         allowClear: true,
+      });
+
+      $('#unitofmeasure').select2({
+        placeholder: "Select a unit",
+        allowClear: true,
+        ajax: {
+          url: '/api/searchUnitOfMeasure', //'https://api.github.com/search/repositories',
+          dataType: 'JSON',
+          delay: 200,
+          data: function (params){
+            return {
+              q: params.term,
+              page: params.page
+            };
+          },
+          processResults: function(data, params){
+            params.page = params.page || 1;
+
+            return {
+              results: data.items,
+              pagination: {
+                more: (params.page = 10) < data.total
+              }
+            };
+          },
+          cache: true
+        },
       });
 
       // Restricts input for each element in the set of matched elements to the given inputFilter.
@@ -358,6 +396,8 @@
           var section_id = $('#section').val();
           var brand_id = $('#brand').val();
           var type = $('#type').val();
+          var actual_on_hand = $('#actual_on_hand').val();
+          var unitofmeasure_id = $('#unitofmeasure').val();
 
           var data= {};
 
@@ -375,6 +415,8 @@
           data.section_id = section_id;
           data.brand_id = brand_id;
           data.type = type;
+          data.actual_on_hand = actual_on_hand;
+          data.unitofmeasure_id = unitofmeasure_id;
 
         $.ajax({
           headers: {

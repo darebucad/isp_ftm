@@ -39,6 +39,7 @@
                 <th>Content</th>
                 <th>Net Weight</th>
                 <th>Stock on Hand</th>
+                <th>Actual on Hand</th>
                 <th>Purchase Price</th>
                 <th>Unit Price</th>
                 <th>Supplier</th>
@@ -150,7 +151,7 @@
       $("#products").DataTable({
         "pageLength": 30,
         "processing": true,
-        "serverSide": true,
+        // "serverSide": true,
         "bDestroy": true,
         "ajax": "api/getProducts/"+ $("#productType").val(),
         "columns":[
@@ -177,6 +178,10 @@
           {
             "width": "5%",
             "data": "stock_on_hand"
+          },
+          {
+            "width": "5%",
+            "data": "actual_on_hand"
           },
           {
             "width": "5%",
