@@ -14,7 +14,7 @@
           <h2>New Purchase Order</h2>
           <ul class="nav navbar-right panel_toolbox">
             <li>
-                <input type="button" class="btn btn-primary" value="Print" id="print">
+                <input type="button" class="btn btn-primary" value="Print" id="print" style="display:none;">
             </li>
           </ul>
           <div class="clearfix"></div>

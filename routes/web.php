@@ -86,6 +86,7 @@ Route::resource('brands', 'BrandController');
 // Purchases
 Route::resource('purchases', 'PurchaseController');
 
+
 //Store
 Route::resource('stores', 'StoreController');
 

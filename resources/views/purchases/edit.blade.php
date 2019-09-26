@@ -11,10 +11,13 @@
 <div class="col-md-12 col-sm-12 col-xs-12">
     <div class="x_panel">
         <div class="x_title">
-          <h2>Purchase Order#{{ str_pad($purchase->po_no, 6, '0', STR_PAD_LEFT) }}</h2>
+          <h2>Purchase Order #{{ str_pad($purchase->po_no, 6, '0', STR_PAD_LEFT) }} <span class="badge badge-light"> <span id="status">{{ $getstatus }}</span></span></h2>
           <ul class="nav navbar-right panel_toolbox">
             <li>
-                <input type="button" class="btn btn-primary" value="Print" onclick="window.location.href='/purchases/create'" />
+              <button type="button" name="approve" id="approve" class="btn btn-primary" style="@if($getstatus == 'New') @else display:none; @endif">Approve</button>
+              <button type="button" name="decline" id="decline" class="btn btn-danger" style="@if($getstatus == 'New') @else display:none; @endif">Decline</button>
+              <button type="button" name="received" id="received" class="btn btn-primary" style="@if($getstatus == 'Approved') @else display:none; @endif">Received</button>
+              <button type="button" name="print" id="print" class="btn btn-primary" onclick="window.location.href='/print/purchase_order/'+{{ $purchase->id }}">Print</button>
             </li>
           </ul>
           <div class="clearfix"></div>
@@ -28,8 +31,8 @@
 
             <div class="form-group">
               <label class="col-md-4 col-sm-3 col-xs-12" for="order_date">Order Date<span class="required">*</span></label>
-              <label class="col-md-5 col-sm-3 col-xs-12" for="supplier">Supplier<span class="required">*</span></label>
-              <label class="col-md-2 col-sm-3 col-xs-12" for="status">Status</span></label>
+              <label class="col-md-4 col-sm-3 col-xs-12" for="po_no">PO#<span class="required">*</span></label>
+              <label class="col-md-4 col-sm-3 col-xs-12" for="supplier">Supplier<span class="required">*</span></label>
             </div>
 
             <div class="form-group">
@@ -47,20 +50,15 @@
                 </fieldset>
               </div>
 
-              <div class="col-md-5 col-sm-10 col-xs-12">
-                <select name="supplier" id="supplier" class="col-md-12 col-xs-12">
+              <div class="col-md-4 col-sm-10 col-xs-12">
+                <input type="text" name="po_no" value="{{ str_pad($purchase->po_no, 6, '0', STR_PAD_LEFT) }}" id="po_no" class="form-control" readonly>
+              </div>
+
+              <div class="col-md-4 col-sm-10 col-xs-12">
+                <select name="supplier" id="supplier" class="col-md-12 col-xs-12" disabled>
                   <option value=""></option>
                   @foreach($suppliers as $supplier)
                   <option value="{{ $supplier->id }}">{{ $supplier->name }}</option>
-                  @endforeach
-                </select>
-              </div>
-
-              <div class="col-md-2 col-sm-10 col-xs-12">
-                <select name="status" id="status" class="col-md-12 col-xs-12">
-                  <option value=""></option>
-                  @foreach($status as $stat)
-                  <option value="{{ $stat->id }}">{{ $stat->name }}</option>
                   @endforeach
                 </select>
               </div>
@@ -98,20 +96,18 @@
                   </thead>
                   <tbody>
                     @foreach($details as $detail)
-                    <tr id="{{ $detail->id }}">
-                      <td class="name">{{ $detail->name }}</td>
-                      <td class="qty @if($purchase->status_id == '2') feedMeNumbers @endif">{{ $detail->quantity }}</td>
-                      <td class="unit_price @if($purchase->status_id == '2') feedMeNumbers @endif">{{ $detail->price }}</td>
+                    <tr id="{{ $detail->id }}" class="items">
+                      <td id="{{ $detail->product_id }}" class="name">{{ $detail->name }}</td>
+                      <td class="qty @if($getstatus == 'New') feedMeNumbers @endif">{{ $detail->quantity }}</td>
+                      <td class="unit_price @if($getstatus == 'New') feedMeNumbers @endif">{{ $detail->price }}</td>
                       <td class="subtotal">{{ ($detail->quantity * $detail->price) }}</td>
-                      <td class="qty_received feedMeNumbers" style="@if($purchase->status_id == '2') display:none; @endif">{{ $detail->quantity }}</td>
-                      <td><button class="delete">Delete</button></td>
+                      <td class="qty_received @if($getstatus == 'Approved') feedMeNumbers @endif" style="@if($purchase->status_id == '2') display:none; @endif">@if($getstatus == 'Approved') {{ $detail->quantity }}@elseif($getstatus == 'Received'){{ $detail->quantity_received }}@endif</td>
+                      <td><a href="#" class="delete"><i class="fa fa-trash-o fa-2x"></i></a></td>
                     </tr>
                     @endforeach
                     <tr>
-                      <td><a href="#" class="add">Add new item</a></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
+                      <td colspan="6"></td>
+                      <!-- <td colspan="6"><a href="#" class="add">Add new item</a></td> -->
                     </tr>
                   </tbody>
                 </table>
@@ -153,14 +149,14 @@
           var unit_price = Number(row.find('.unit_price').text());
           row.find('.subtotal').text(qty * unit_price);
         })
-
       }
     }
 
     $(document).ready(function(){
       var purchase_id =  $('#purchase_id').val();
       var supplier_id = $('#supplier_id').val();
-      var status_id = $('#status_id').val();
+      var order_date = $('#single_cal3').val();
+      var po_no = $('#po_no').val();
       var editor = new SimpleTableCellEditor("orders");
 
       editor.SetEditableClass("editMe");
@@ -171,7 +167,9 @@
       });
 
       $.ajaxSetup({
-          headers: 'X-CSRF-TOKEN': $('meta[name="token"]').attr('content')
+          headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          }
       });
 
       $('#supplier').select2({
@@ -179,41 +177,6 @@
         allowClear: true
       }).val(supplier_id);
       $('#supplier').trigger('change');
-
-      $('#status').select2({
-        placeholder: "Please select a status",
-        allowClear: true
-      }).val(status_id);
-      $('#status').trigger('change');
-
-      $('#supplier').on('select2:select', function(e){
-        $.ajax({
-          url: "/api/populateProducts/" + e.params.data.id,
-          dataType: "JSON",
-          success: function(data){
-            $('#orders tbody').empty();
-            var html = '';
-            for (var i = 0; i < data.length; i++) {
-              html += '<tr id='+ data[i].id +' class="items">' +
-                '<td>' + data[i].name + '</td>' +
-                '<td class="qty feedMeNumbers">' + '1.00' + '</td>' +
-                '<td class="unit_price feedMeNumbers">' + data[i].unit_price + '</td>' +
-                '<td><button class="delete">Delete</button></td>' +
-                '</tr>';
-            }
-            html += '<tr>' +
-              '<td><a href="#" class="add">Add new item</a></td>' +
-              '<td>' + '' + '</td>' +
-              '<td>' + '' + '</td>' +
-              '<td>' + '' + '</td>' +
-              '</tr>';
-            $('#orders').prepend(html)
-          },
-          error: function(data){
-
-          }
-        });
-      });
 
       $('#orders').on('click', '.add', function(e){
         e.preventDefault();
@@ -264,22 +227,21 @@
 
       $('#btnSubmit').on('click', function(e){
         e.preventDefault();
-        var order_date = $('#single_cal3').val();
-        var supplier_id = $('#supplier').val();
-        var status_id = $('#status').val();
         var description = $('#description').val();
+        var status = $('#status').text();
         var data= {};
         var items = [];
 
         // Items
         $('#orders .items').each(function(){
           var row = $(this);
-          var product_id = row.attr('id');
+          var id = row.attr('id')
+          var product_id = row.find('td:eq(0)').attr('id');
           var qty = row.find('.qty').text();
           var unit_price = row.find('.unit_price').text();
           var qty_received = row.find('.qty_received').text();
           var obj = {};
-
+          obj.id = id
           obj.product_id = product_id;
           obj.qty = qty;
           obj.unit_price = unit_price;
@@ -290,9 +252,12 @@
         // Data
         data.order_date = order_date;
         data.supplier_id = supplier_id;
-        data.status_id = status_id;
+        data.status = status;
         data.description = description;
         data.items = items;
+        data.po_no = po_no;
+
+        console.log(data);
 
         $.ajax({
           type: "PUT",
@@ -323,6 +288,18 @@
         });
         toastr.error(errMessageContent, 'Error', {timeOut: 3000});
       }
+
+      $('#approve').on('click', function(){
+        $('#status').text('Approved');
+      });
+
+      $('#decline').on('click', function(){
+        $('#status').text('Declined');
+      });
+
+      $('#received').on('click', function(){
+        $('#status').text('Received');
+      });
 
     });
   </script>
