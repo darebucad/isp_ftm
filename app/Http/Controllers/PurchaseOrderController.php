@@ -14,7 +14,7 @@ use App\Product;
 use Validator;
 use Carbon\Carbon;
 
-class PurchaseController extends Controller
+class PurchaseOrderController extends Controller
 {
 
     /**
@@ -35,7 +35,7 @@ class PurchaseController extends Controller
      */
     public function index()
     {
-        return view('purchases.index');
+        return view('purchaseorder.index');
     }
 
     /**
@@ -46,7 +46,7 @@ class PurchaseController extends Controller
     public function create()
     {
         $purchase = Purchase::select('po_no')->orderBy('created_at', 'desc')->first();
-        return view('purchases.create')->with('po_no', $purchase->po_no);
+        return view('purchaseorder.create')->with('po_no', $purchase->po_no);
     }
 
     /**
@@ -72,6 +72,7 @@ class PurchaseController extends Controller
       );
 
       if ($validator->fails()) {
+        
         return response()->json(['errors'=>$validator->errors()->all()]);
       } else {
         $purchase = new Purchase();
@@ -139,7 +140,7 @@ class PurchaseController extends Controller
         ->where('p.id', $id)
         ->first();
 
-        return view('purchases.edit', ['purchase' => $purchase, 'details' => $details, 'suppliers' => $suppliers, 'status' => $status,
+        return view('purchaseorder.edit', ['purchase' => $purchase, 'details' => $details, 'suppliers' => $suppliers, 'status' => $status,
       'getstatus' => $getstatus->name]);
     }
 

@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Validator;
 
 use App\Store;
+use App\StoreProduct;
 
 use Carbon\Carbon;
 
@@ -19,7 +20,7 @@ class StoreController extends Controller
      */
     public function index()
     {
-        return view("store.index");
+        return view('store.index');
     }
 
     /**
@@ -40,8 +41,7 @@ class StoreController extends Controller
      */
     public function store(Request $request)
     {
-        $user_id = Auth::id();
-      $store = new Store();
+      $user_id = Auth::id();
       $current_time = Carbon::now('Asia/Manila');
 
         $messages = [
@@ -60,14 +60,23 @@ class StoreController extends Controller
         if ($validator->fails()) {
           return response()->json(['errors'=>$validator->errors()->all()]);
         } else {
-
-
+          // Store
+          $store = new Store();
           $store->name = $request->input('name');
           $store->address = $request->input('address');
           $store->created_at = $current_time->toDateTimeString();
           $store->user_id = $user_id;
           $store->save();
 
+          // Store product
+          foreach ($request->items as $value) {
+            $storeproduct = New StoreProduct();
+            $storeproduct->store_id = $store->id;
+            $storeproduct->product_id = $value['product_id'];
+            $storeproduct->quantity = $value['qty'];
+            $storeproduct->created_at = $current_time->toDateTimeString();
+            $storeproduct->save();
+          }
         }
 
         $response = array(

@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('layouts.app')
 
 @section('css')
   <link href="{{asset('css/dataTables.bootstrap.min.css')}}" rel="stylesheet">
@@ -9,23 +9,23 @@
   <input type="hidden" id="delete_id">
     <div class="x_panel">
         <div class="x_title">
-          <h2>Purchase Orders</h2>
+          <h2>Sales Orders</h2>
           <ul class="nav navbar-right panel_toolbox">
             <li>
-                <input type="button" class="btn btn-primary" value="New" onclick="window.location.href='/purchases/create'" />
+                <input type="button" class="btn btn-primary" value="New" onclick="window.location.href='/salesorders/create'" />
             </li>
           </ul>
           <div class="clearfix"></div>
         </div>
         <div class="x_content">
-          <table class="table table-striped" id="purchases" style="width:100%; cursor:pointer;">
+          <table class="table table-striped" id="sales" style="width:100%; cursor:pointer;">
             <thead>
               <tr>
-                <th>PO No.</th>
+                <th>SO No.</th>
                 <th>Date Ordered</th>
-                <th>Supplier</th>
+                <th>Store</th>
                 <th>Desription</th>
-                <th>Date Received</th>
+                <th>Date Delivered</th>
                 <th>Status</th>
               </tr>
             </thead>
@@ -59,14 +59,15 @@
   <script src="{{asset('js/dataTables.bootstrap.min.js')}}"></script>
   <script>
     $(document).ready(function(){
-      var table = $("#purchases").DataTable({
+
+      var table = $("#sales").DataTable({
         "pageLength": 30,
         "processing": true,
-        "ajax": "api/getPurchaseOrders",
+        "ajax": "api/salesorder",
         "columns":[
           {
             "width": "15%",
-            "data":"po_no",
+            "data":"so_no",
           },
           {
             "width": "10%",
@@ -74,7 +75,7 @@
           },
           {
             "width": "15%",
-            "data": "name"
+            "data": "store_id"
           },
           {
             "width": "20%",
@@ -82,11 +83,11 @@
           },
           {
             "width": "10%",
-            "data": "receipt_date"
+            "data": "delivery_date"
           },
           {
             "width": "10%",
-            "data": "status"
+            "data": "status_id"
           },
         ],
         order: [[0, "desc"]]

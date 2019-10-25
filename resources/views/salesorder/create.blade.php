@@ -1,7 +1,7 @@
-@extends('layouts.master')
+@extends('layouts.app')
 
 @section('css')
-  <link href="{{asset('css/dataTables.bootstrap.min.css')}}" rel="stylesheet">
+  <!-- <link href="{{ asset('css/dataTables.bootstrap.min.css') }}" rel="stylesheet"> -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
   <!-- Select2 4.0.8 -->
   <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet">
@@ -11,7 +11,7 @@
 <div class="col-md-12 col-sm-12 col-xs-12">
     <div class="x_panel">
         <div class="x_title">
-          <h2>New Purchase Order</h2>
+          <h2>New Sales Order</h2>
           <ul class="nav navbar-right panel_toolbox">
             <li>
                 <input type="button" class="btn btn-primary" value="Print" id="print" style="display:none;">
@@ -20,15 +20,15 @@
           <div class="clearfix"></div>
         </div>
         <div class="x_content">
-          <form id="purchase_order" data-parsley-validate="" class="form-horizontal form-label-left" novalidate="">
+          <form id="sales_order" data-parsley-validate="" class="form-horizontal form-label-left" novalidate="">
             @csrf
-            <input type="hidden" name="po_id" value="" id="po_id">
+            <input type="hidden" name="so_id" value="" id="so_id">
+            <input type="hidden" name="salesorder_id" value="" id="salesorder_id">
 
             <div class="form-group">
               <label class="col-md-4 col-sm-3 col-xs-12" for="order_date">Order Date<span class="required">*</span></label>
-              <label class="col-md-4 col-sm-3 col-xs-12" for="po_no">PO#<span class="required">*</span></label>
-              <label class="col-md-4 col-sm-3 col-xs-12" for="supplier">Supplier<span class="required">*</span></label>
-              <!-- <label class="col-md-2 col-sm-3 col-xs-12" for="status">Status</span></label> -->
+              <label class="col-md-4 col-sm-3 col-xs-12" for="so_no">SO#<span class="required">*</span></label>
+              <label class="col-md-4 col-sm-3 col-xs-12" for="store">Store/Agent<span class="required">*</span></label>
             </div>
 
             <div class="form-group">
@@ -47,20 +47,14 @@
               </div>
 
               <div class="col-md-4 col-sm-10 col-xs-12">
-                <input type="text" name="po_no" value="{{ str_pad($po_no + 1, 6, '0', STR_PAD_LEFT) }}" id="po_no" class="form-control">
+                <input type="text" name="so_no" value="{{ str_pad($salesorder->so_no + 1, 8, '0', STR_PAD_LEFT) }}" id="so_no" class="form-control" readonly>
               </div>
 
               <div class="col-md-4 col-sm-10 col-xs-12">
-                <select name="supplier" id="supplier" class="col-md-12 col-xs-12">
+                <select name="store" id="store" class="col-md-12 col-xs-12">
                   <option value=""></option>
                 </select>
               </div>
-
-              <!-- <div class="col-md-2 col-sm-10 col-xs-12">
-                <select name="status" id="status" class="col-md-12 col-xs-12" disabled>
-                  <option value=""></option>
-                </select>
-              </div> -->
             </div>
 
             <div class="form-group">
@@ -76,7 +70,7 @@
             <div class="ln_solid"></div>
             <div class="form-group row">
               <div class="col-md-12">
-                <button type="button" name="btn_update" id="btn_update" class="btn btn-danger" onclick="updateTable()">Update</button>
+                <button type="button" class="btn btn-danger" onclick="updateTable()">Update</button>
               </div>
             </div>
 
@@ -85,8 +79,8 @@
                 <table class="table table-striped" id="orders" style="width: 100%;">
                   <thead>
                     <tr>
-                      <th>Raw Material</th>
-                      <th>Quantity</th>
+                      <th>Finished Product (s)</th>
+                      <th>Qty</th>
                       <th>Price</th>
                       <th>Subtotal</th>
                       <th>Action</th>
@@ -100,8 +94,8 @@
 
             <div class="form-group">
               <div class="col-md-12 col-sm-6 col-xs-12 col-md-offset-5">
-                <input type="button" class="btn btn-primary" value="Cancel" onclick="window.location.href='/purchases'" />
-                <button type="button" class="btn btn-success" id="btnSubmit">Submit</button>
+                <input type="button" class="btn btn-primary" value="Cancel" onclick="window.location.href='/salesorders'" />
+                <button type="submit" class="btn btn-success" id="btn_submit">Submit</button>
               </div>
             </div>
           </form>
@@ -146,11 +140,17 @@
         // console.log(`Cell edited : ${event.oldValue} => ${event.newValue}`);
       });
 
-      $('#supplier').select2({
-        placeholder: "Select a supplier",
+      $.ajaxSetup({
+          headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          }
+      });
+
+      $('#store').select2({
+        placeholder: "Select a store/agent",
         allowClear: true,
         ajax: {
-          url: '/api/searchSuppliers', //'https://api.github.com/search/repositories',
+          url: '/api/searchStores', //'https://api.github.com/search/repositories',
           dataType: 'JSON',
           delay: 200,
           data: function (params){
@@ -173,39 +173,9 @@
         },
       });
 
-      // $('#status').select2({
-      //   placeholder: "Select a status",
-      //   allowClear: true,
-      //   ajax: {
-      //     url: '/api/searchPurchaseStatus', //'https://api.github.com/search/repositories',
-      //     dataType: 'JSON',
-      //     delay: 200,
-      //     data: function (params){
-      //       return {
-      //         q: params.term,
-      //         page: params.page
-      //       };
-      //     },
-      //     processResults: function(data, params){
-      //       params.page = params.page || 1;
-      //
-      //       return {
-      //         results: data.items,
-      //         pagination: {
-      //           more: (params.page = 10) < data.total
-      //         }
-      //       };
-      //     },
-      //     cache: true
-      //   },
-      // });
-
-      $('#supplier').on('select2:select', function(e){
+      $('#store').on('select2:select', function(e){
         $.ajax({
-          headers: {
-            'X-CSRF-TOKEN': _token
-          },
-          url: "/api/populateProducts/" + e.params.data.id,
+          url: "/api/populateFinishedProducts/" + e.params.data.id,
           dataType: "JSON",
           success: function(data){
             $('#orders tbody').empty();
@@ -213,9 +183,9 @@
             for (var i = 0; i < data.length; i++) {
               html += '<tr id='+ data[i].id +' class="items">' +
                 '<td>' + data[i].name + '</td>' +
-                '<td class="qty feedMeNumbers">' + '1.00' + '</td>' +
+                '<td class="qty feedMeNumbers">' + data[i].quantity + '</td>' +
                 '<td class="unit_price feedMeNumbers">' + data[i].unit_price + '</td>' +
-                '<td class="subtotal">' + Number(1) * Number(data[i].unit_price) + '</td>' +
+                '<td class="subtotal">' + Number(data[i].quantity) * Number(data[i].unit_price) + '</td>' +
                 '<td><button class="delete">Delete</button></td>' +
                 '</tr>';
             }
@@ -234,6 +204,8 @@
           }
         });
       });
+
+
 
       $('#orders').on('click', '.add', function(e){
         e.preventDefault();
@@ -287,21 +259,22 @@
       $('#print').on('click', function(e){
         e.preventDefault();
 
-        window.location.href = '/print/purchase_order/' + $('#po_id').val();
-      })
+        console.log($('#salesorder_id').val());
+        // window.location.href = '/print/purchase_order/' + $('#po_id').val();
+      });
 
-      $('#btnSubmit').on('click', function(e){
+      // Submit button click event
+      $('#btn_submit').on('click', function(e){
         e.preventDefault();
 
+        var salesorder_id = $('#salesorder_id').val();
         var order_date = $('#single_cal3').val();
-        var supplier_id = $('#supplier').val();
-        // var status_id = $('#status').val();
+        var store_id = $('#store').val();
         var description = $('#description').val();
-        var po_no = $('#po_no').val();
+        var so_no = $('#so_no').val();
         var data= {};
         var items = [];
 
-        // Items
         $('#orders .items').each(function(){
           var row = $(this);
           var product_id = row.attr('id');
@@ -317,21 +290,16 @@
 
           items.push(obj);
         });
-
-        // Data
+        data.sales_order_id = salesorder_id;
         data.order_date = order_date;
-        data.supplier_id = supplier_id;
-        // data.status_id = status_id;
+        data.store_id = store_id;
         data.description = description;
-        data.po_no = po_no;
+        data.so_no = so_no;
         data.items = items;
 
         $.ajax({
-          headers: {
-            'X-CSRF-TOKEN': _token
-          },
-          url: '/purchases',
-          type: "POST",
+          url: '/api/salesorder',
+          type: 'POST',
           data: data,
           dataType: 'JSON',
           success: function(data){
@@ -339,15 +307,18 @@
               showErrorMessage(data.errors);
 
             } else {
-              toastr.success(data.success, 'Success', {timeout: 1000});
+              toastr.success('New sales order was successfully added', 'Success', {timeout: 1000});
+
+              console.log(data);
               $('#print').show();
-              $('#po_id').val(data.id);
+              $('#salesorder_id').val(data.data.id);
             }
           },
           error: function(jqXHR, textStatus, errorThrown) {
             toastr.error('<p>status code: '+jqXHR.status+'</p><p>errorThrown: ' + errorThrown + '</p><p>jqXHR.responseText:</p><div>'+jqXHR.responseText + '</div>');
           },
         });
+
       });
 
       function showErrorMessage(errMessage){

@@ -33,6 +33,7 @@ Route::get('/Categories/Delete/{id}','CategoriesController@Destroy');
 Route::resource('products', 'ProductController');
 
 // API
+// get
 Route::get('/api/getCategories', 'APIController@getCategories')->name("api.getCategories");
 Route::get('/api/getSuppliers', 'APIController@getSuppliers')->name('api.getSuppliers');
 Route::get('/api/getWarehouse', 'APIController@getWarehouse')->name('api.getWarehouse');
@@ -41,17 +42,24 @@ Route::get('/api/getProducts/{type}', 'APIController@getProducts')->name('api.ge
 Route::get('/api/getBrands', 'APIController@getBrands')->name('api.getBrands');
 Route::get('/api/getStores', 'APIController@getStores')->name('api.getStores');
 Route::get('/api/getUOM', 'APIController@getUOM')->name('api.getUOM');
+Route::get('/api/getPurchaseOrders', 'APIController@getPurchaseOrders');
+Route::get('/api/getSalesOrders', 'APIController@getSalesOrders');
+
+// search
 Route::get('/api/searchCategories', 'APIController@searchCategories')->name('api.searchCategories');
 Route::get('/api/searchSuppliers', 'APIController@searchSuppliers')->name('api.searchSuppliers');
 Route::get('/api/searchWarehouse', 'APIController@searchWarehouse')->name('api.searchWarehouse');
 Route::get('/api/searchSections', 'APIController@searchSections')->name('api.searchSections');
 Route::get('/api/searchBrands', 'APIController@searchBrands');
-Route::get('/api/populateProducts/{id}', 'APIController@populateProducts');
 Route::get('/api/searchPurchaseStatus', 'APIController@searchPurchaseStatus');
 Route::get('/api/searchProducts', 'APIController@searchProducts');
-Route::get('/api/getPurchaseOrders', 'APIController@getPurchaseOrders');
 Route::get('/api/searchUnitOfMeasure', 'APIController@searchUnitOfMeasure');
+Route::get('/api/searchStores', 'APIController@searchStores');
+Route::get('/api/searchFinishedProducts', 'APIController@searchFinishedProducts');
 
+// populate or fetch
+Route::get('/api/populateProducts/{id}', 'APIController@populateProducts');
+Route::get('/api/populateFinishedProducts/{id}', 'APIController@populateFinishedProducts');
 
 // Suppliers
 Route::get('/suppliers', 'SuppliersController@index');
@@ -84,8 +92,10 @@ Route::get('/Section/Delete/{id}','SectionController@Destroy');
 Route::resource('brands', 'BrandController');
 
 // Purchases
-Route::resource('purchases', 'PurchaseController');
+Route::resource('purchases', 'PurchaseOrderController');
 
+// Sales Orders
+Route::resource('salesorders', 'SalesOrderController');
 
 //Store
 Route::resource('stores', 'StoreController');
@@ -95,3 +105,7 @@ Route::resource('uom', 'UnitOfMeasureController');
 
 // Print
 Route::get('/print/purchase_order/{id}', 'PrintController@printPurchaseOrder');
+
+
+// API Token
+Route::get('/api/token', 'APITokenController@update');

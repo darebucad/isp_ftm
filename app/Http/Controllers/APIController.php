@@ -14,20 +14,22 @@ use App\Brand;
 use App\Store;
 use App\UnitOfMeasure;
 use App\PurchaseStatus;
+use App\SalesOrder;
 
 class APIController extends Controller
 {
 
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
+    // /**
+    //  * Create a new controller instance.
+    //  *
+    //  * @return void
+    //  */
+    // public function __construct()
+    // {
+    //     $this->middleware('auth');
+    // }
 
+    // GET
 
     // Get the product categories
     public function getCategories(){
@@ -126,6 +128,18 @@ class APIController extends Controller
       return datatables($query)->make(true);
     }
 
+    public function getSalesOrders(){
+      $query = DB::table('sales_orders as so')
+      ->leftjoin('store as s', 's.id', '=', 'so.store_id')
+      ->leftjoin('statuses as st', 'st.id', '=', 'so.status_id')
+      ->leftjoin('users as u', 'u.id', '=', 'so.user_id')
+      ->select('so.id', DB::raw('lpad(so.so_no, 8, "0") as so_no'), 'so.order_date', 'so.delivery_date', 'so.description', 's.name as store',
+      'st.name as status', 'u.name as user', 'so.created_at');
+
+      return datatables($query)->make(true);
+    }
+
+    // SEARCH
 
     // Search list of categories
     public function searchCategories(Request $request){
@@ -240,13 +254,23 @@ class APIController extends Controller
       return response()->json($response);
     }
 
+    // Search list of finished products
+    public function searchFinishedProducts(Request $request){
+      $term = $request->q;
 
-    // Populate list of products
-    public function populateProducts($id){
-      $products = Product::where('supplier_id', $id)->where('type', '0')->get();
+      $products = Product::where('name', 'LIKE', '%' . $term . '%')
+      ->where('type', '1')
+      ->select('id', 'name AS text')
+      ->orderBy('name', 'ASC')
+      ->get();
 
-      return response()->json($products);
+      $response = array(
+        'items' => $products
+      );
+
+      return response()->json($response);
     }
+
 
     // Search list of unit of measurements
     public function searchUnitOfMeasure(Request $request){
@@ -258,7 +282,44 @@ class APIController extends Controller
       $response = array(
         'items' => $unitofmeasures
       );
-
       return response()->json($response);
     }
+
+
+    // Search list of stores
+    public function searchStores(Request $request){
+      $stores = Store::where('name', 'LIKE', '%' . $request->q . '%')
+      ->select('id', 'name AS text')
+      ->orderBy('name', 'ASC')
+      ->get();
+
+      $response = array(
+        'items' => $stores
+      );
+      return response()->json($response);
+    }
+
+    // POPULATE or FETCH
+
+    // Populate list of products
+    public function populateProducts($id){
+      $products = Product::where('supplier_id', $id)->where('type', '0')->get();
+
+      return response()->json($products);
+    }
+
+
+    // Populate list of finished Products
+    public function populateFinishedProducts($id){
+      $products = DB::table('store_products as sp')
+      ->where('sp.store_id', $id)
+      ->leftjoin('products as p', 'p.id', '=', 'sp.product_id')
+      ->select('p.id', 'p.name', 'sp.quantity', 'p.unit_price')
+      ->get();
+
+      return response()->json($products);
+
+    }
+
+
 }

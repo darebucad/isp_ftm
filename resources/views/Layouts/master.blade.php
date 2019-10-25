@@ -35,6 +35,15 @@
 
     <!-- Custom Theme Style -->
     <link href="{{asset('css/custom.min.css')}}" rel="stylesheet">
+
+    <!-- Fonts -->
+    <link rel="dns-prefetch" href="//fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+
+    <!-- Styles -->
+    {{-- <link href="{{ asset('css/app.css') }}" rel="stylesheet"> --}}
+
+
     @yield('css')
   </head>
 
@@ -78,7 +87,15 @@
                   <li><a><i class="fa fa-edit"></i> Purchases <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                       <li><a href="/purchases">Purchase Orders</a></li>
-                      <li><a href="#">Orders</a></li>
+                      <li><a href="/salesorders">Sales Orders</a></li>
+                    </ul>
+                  </li>
+
+                  <li><a><i class="fa fa-edit"></i> Production <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="#">Master List</a></li>
+                      <li><a href="#">Enteng Production</a></li>
+                      <li><a href="#">Jun Production</a></li>
                     </ul>
                   </li>
 
@@ -184,6 +201,9 @@
         <!-- /footer content -->
       </div>
     </div>
+
+    <!-- Scripts -->
+    <script src="{{ asset('js/app.js') }}"></script>
 
     <!-- jQuery -->
     <script src="{{asset('js/jquery.min.js')}}"></script>

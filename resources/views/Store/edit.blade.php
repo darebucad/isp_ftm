@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('layouts.app')
 
 @section('css')
   <link href="{{asset('css/dataTables.bootstrap.min.css')}}" rel="stylesheet">
@@ -73,7 +73,7 @@
                         window.setTimeout( function(){
                           window.location.href="/stores";
                         }, 3000 );
-                        
+
                       }
                   },
                   error:function(error){
@@ -89,7 +89,7 @@
           function showErrorMessage(errMessage){
             var errMessageContent = '';
             errMessage.forEach(element => {
-              errMessageContent = errMessageContent + element + '<br/>';       
+              errMessageContent = errMessageContent + element + '<br/>';
             });
             toastr.error(errMessageContent, 'Error', {timeOut: 3000});
           }

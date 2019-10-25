@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('layouts.app')
 
 @section('css')
   <link href="{{asset('css/dataTables.bootstrap.min.css')}}" rel="stylesheet">
